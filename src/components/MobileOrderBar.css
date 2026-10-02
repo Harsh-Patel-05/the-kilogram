@@ -7,17 +7,10 @@
   gap: 8px;
   padding: 8px var(--gutter) calc(8px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--line);
-  background: rgba(10, 11, 11, 0.95);
+  background: rgba(10, 11, 11, 0.97);
   box-shadow: 0 -12px 30px -16px rgba(0, 0, 0, 0.9);
   transform: translateY(110%);
   transition: transform 0.5s var(--ease-out);
-}
-
-@supports (backdrop-filter: blur(1px)) {
-  .orderbar {
-    background: rgba(10, 11, 11, 0.82);
-    backdrop-filter: blur(16px) saturate(140%);
-  }
 }
 
 .is-loaded .orderbar {

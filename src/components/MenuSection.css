@@ -78,14 +78,16 @@
   z-index: 20;
   margin-inline: calc(var(--gutter) * -1);
   padding-block: 10px;
-  background: rgba(10, 11, 11, 0.94);
+  background: rgba(10, 11, 11, 0.96);
   border-bottom: 1px solid var(--line);
 }
 
 @supports (backdrop-filter: blur(1px)) {
-  .menu__chipbar {
-    background: rgba(10, 11, 11, 0.8);
-    backdrop-filter: blur(14px);
+  @media (min-width: 1024px) and (hover: hover) {
+    .menu__chipbar {
+      background: rgba(10, 11, 11, 0.8);
+      backdrop-filter: blur(14px);
+    }
   }
 }
 

@@ -21,7 +21,7 @@
 }
 
 .header.is-scrolled {
-  background: rgba(10, 11, 11, 0.94);
+  background: rgba(10, 11, 11, 0.96);
   border-bottom-color: var(--line);
   box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.9);
 }
@@ -30,10 +30,13 @@
   opacity: 0;
 }
 
+/* Backdrop blur re-rasterises on every scroll frame; phones get the solid background instead. */
 @supports (backdrop-filter: blur(1px)) {
-  .header.is-scrolled {
-    background: rgba(10, 11, 11, 0.82);
-    backdrop-filter: blur(14px) saturate(140%);
+  @media (min-width: 1024px) and (hover: hover) {
+    .header.is-scrolled {
+      background: rgba(10, 11, 11, 0.82);
+      backdrop-filter: blur(14px) saturate(140%);
+    }
   }
 }
 

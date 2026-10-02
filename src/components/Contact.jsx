@@ -1,9 +1,49 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Clock, MapPin, Navigation, Phone } from 'lucide-react';
 import DeliveryLinks from './DeliveryLinks.jsx';
 import OpenStatus from './OpenStatus.jsx';
+import useInView from '../hooks/useInView.js';
 import { hours, site } from '../data/site.js';
 import './Contact.css';
+
+const SCROLL_IDLE_MS = 250;
+
+/** The Google Maps embed runs heavy scripts, so it is only attached near the viewport once scrolling pauses. */
+function MapEmbed() {
+  const ref = useRef(null);
+  const near = useInView(ref, '400px 0px', false);
+  const [attach, setAttach] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!near || attach) return undefined;
+    let timer = setTimeout(() => setAttach(true), SCROLL_IDLE_MS);
+    const onScroll = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => setAttach(true), SCROLL_IDLE_MS);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [near, attach]);
+
+  return (
+    <div ref={ref} className="contact__map">
+      {attach && (
+        <iframe
+          className={loaded ? 'is-loaded' : undefined}
+          title="Map showing The Kilogram in Jagatpur, Ahmedabad"
+          src={site.mapEmbedSrc}
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+          onLoad={() => setLoaded(true)}
+        />
+      )}
+    </div>
+  );
+}
 
 export default function Contact() {
   return (
@@ -46,15 +86,7 @@ export default function Contact() {
           </div>
 
           <div className="contact__visit">
-            <div className="contact__map">
-              <iframe
-                title="Map showing The Kilogram in Jagatpur, Ahmedabad"
-                src={site.mapEmbedSrc}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
-              />
-            </div>
+            <MapEmbed />
 
             <div className="contact__info">
               <div className="contact__row">

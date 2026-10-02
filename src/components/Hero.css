@@ -295,6 +295,10 @@
   animation: hero-up 0.7s var(--ease-spring) 0.55s forwards;
 }
 
+.hero.is-offscreen .hero__logo {
+  animation-play-state: paused;
+}
+
 @keyframes hero-up {
   to {
     opacity: 1;

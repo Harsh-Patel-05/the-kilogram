@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import { ArrowRight, Leaf, MapPin, Phone, Weight } from 'lucide-react';
+import useInView from '../hooks/useInView.js';
 import logo from '../assets/logo/logo.webp';
 import heroLarge from '../assets/food/hero-spread.webp';
 import heroSmall from '../assets/food/hero-spread-600.webp';
@@ -14,8 +16,11 @@ const trust = [
 ];
 
 export default function Hero() {
+  const ref = useRef(null);
+  const inView = useInView(ref);
+
   return (
-    <section id="home" className="hero" aria-labelledby="hero-title">
+    <section ref={ref} id="home" className={`hero${inView ? '' : ' is-offscreen'}`} aria-labelledby="hero-title">
       <svg className="hero__lines" viewBox="0 0 800 520" fill="none" aria-hidden="true">
         <path d="M80 250 L720 150" />
         <path d="M400 200 L470 470 H330 Z" />

@@ -37,6 +37,10 @@
   animation: status-ping 2s var(--ease-out) infinite;
 }
 
+.open-status.is-offscreen .open-status__dot::after {
+  animation-play-state: paused;
+}
+
 .open-status--closing,
 .open-status--opening {
   --status: var(--yellow);
