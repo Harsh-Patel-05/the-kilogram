@@ -13,8 +13,6 @@ const placeQuery = encodeURIComponent('The Kilogram Jagatpur Ahmedabad');
 
 export const site = {
   name: 'The Kilogram',
-  phoneCountryCode: '+91',
-  phoneLocal: '90999 33459',
   phoneDisplay: '+91 90999 33459',
   phoneHref: 'tel:+919099933459',
   whatsappHref: `https://wa.me/919099933459?text=${encodeURIComponent(
