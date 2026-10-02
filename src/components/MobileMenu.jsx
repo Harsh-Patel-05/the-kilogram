@@ -3,8 +3,9 @@ import { createPortal } from 'react-dom';
 import { ArrowRight, BookOpen, MapPin, Phone, X } from 'lucide-react';
 import BrandLockup from './BrandLockup.jsx';
 import DeliveryLinks from './DeliveryLinks.jsx';
+import HoursText from './HoursText.jsx';
 import OpenStatus from './OpenStatus.jsx';
-import { hours, navLinks, site } from '../data/site.js';
+import { navLinks, site } from '../data/site.js';
 import './MobileMenu.css';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
@@ -112,10 +113,7 @@ export default function MobileMenu({ open, onClose, returnFocusRef }) {
           <div className="mmenu__hours">
             <OpenStatus />
             <span>
-              {hours.daysLabel},{' '}
-              <span className="nowrap">
-                {hours.openLabel} – {hours.closeLabel}
-              </span>
+              <HoursText />
             </span>
           </div>
           <p className="mmenu__phone">

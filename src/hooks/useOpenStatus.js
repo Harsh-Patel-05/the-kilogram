@@ -18,18 +18,22 @@ function minutesNowIST() {
 
 function computeStatus() {
   const now = minutesNowIST();
-  if (now >= hours.open && now < hours.close) {
-    return hours.close - now <= SOON
-      ? { state: 'closing', label: 'Closing soon', detail: `until ${hours.closeLabel}` }
-      : { state: 'open', label: 'Open now', detail: `until ${hours.closeLabel}` };
+  const current = hours.slots.find((s) => now >= s.open && now < s.close);
+  if (current) {
+    return current.close - now <= SOON
+      ? { state: 'closing', label: 'Closing soon', detail: `until ${current.closeLabel}` }
+      : { state: 'open', label: 'Open now', detail: `until ${current.closeLabel}` };
   }
-  if (now < hours.open && hours.open - now <= SOON) {
-    return { state: 'opening', label: 'Opening soon', detail: `at ${hours.openLabel}` };
+  const next = hours.slots.find((s) => now < s.open);
+  if (next && next.open - now <= SOON) {
+    return { state: 'opening', label: 'Opening soon', detail: `at ${next.openLabel}` };
   }
   return {
     state: 'closed',
     label: 'Closed now',
-    detail: `opens ${now < hours.open ? 'today' : 'tomorrow'} at ${hours.openLabel}`,
+    detail: next
+      ? `opens today at ${next.openLabel}`
+      : `opens tomorrow at ${hours.slots[0].openLabel}`,
   };
 }
 

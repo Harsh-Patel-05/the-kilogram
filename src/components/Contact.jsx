@@ -86,9 +86,11 @@ export default function Contact() {
                   <h3 className="contact__label">Opening hours</h3>
                   <dl className="contact__hours">
                     <dt>{hours.daysLabel}</dt>
-                    <dd>
-                      {hours.openLabel} – {hours.closeLabel}
-                    </dd>
+                    {hours.slots.map((slot) => (
+                      <dd key={slot.open}>
+                        {slot.openLabel} – {slot.closeLabel}
+                      </dd>
+                    ))}
                   </dl>
                   <OpenStatus className="contact__status" />
                 </div>

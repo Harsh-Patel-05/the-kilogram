@@ -28,13 +28,13 @@ export const site = {
   mapEmbedSrc: `https://maps.google.com/maps?q=${placeQuery}&ll=23.107234,72.550806&z=16&output=embed`,
 };
 
-/** Same hours every day, in IST. Minutes from midnight. */
+/** Same hours every day, in IST. Minutes from midnight; slots in time order. */
 export const hours = {
-  open: 18 * 60 + 30,
-  close: 23 * 60,
-  openLabel: '6:30 PM',
-  closeLabel: '11:00 PM',
   daysLabel: 'All 7 days',
+  slots: [
+    { open: 11 * 60, close: 14 * 60, openLabel: '11 AM', closeLabel: '2 PM' },
+    { open: 18 * 60, close: 23 * 60, openLabel: '6 PM', closeLabel: '11 PM' },
+  ],
 };
 
 export const delivery = [

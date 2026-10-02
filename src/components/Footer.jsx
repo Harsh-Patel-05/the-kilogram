@@ -1,6 +1,7 @@
 import { Clock, MapPin, Phone } from 'lucide-react';
 import logo from '../assets/logo/logo.webp';
-import { hours, navLinks, site } from '../data/site.js';
+import HoursText from './HoursText.jsx';
+import { navLinks, site } from '../data/site.js';
 import './Footer.css';
 
 export default function Footer() {
@@ -50,10 +51,7 @@ export default function Footer() {
           <p className="footer__address">
             <Clock aria-hidden="true" />
             <span>
-              {hours.daysLabel},{' '}
-              <span className="nowrap">
-                {hours.openLabel} – {hours.closeLabel}
-              </span>
+              <HoursText />
             </span>
           </p>
         </div>
