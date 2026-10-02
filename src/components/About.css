@@ -1,0 +1,117 @@
+.about__grid {
+  display: grid;
+  gap: var(--space-10);
+  align-items: center;
+}
+
+.about__media {
+  position: relative;
+  max-width: 440px;
+  padding: 0 16% 12% 0;
+}
+
+.about__media figure {
+  margin: 0;
+}
+
+.about__main img {
+  width: 100%;
+  aspect-ratio: 4 / 4.6;
+  object-fit: cover;
+  border-radius: var(--radius-xl);
+}
+
+.about__small {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 46%;
+  padding: 6px;
+  border-radius: calc(var(--radius-l) + 6px);
+  background: var(--bg);
+}
+
+.about__small img {
+  width: 100%;
+  aspect-ratio: 4 / 4.4;
+  object-fit: cover;
+  border-radius: var(--radius-l);
+}
+
+.about__stamp {
+  position: absolute;
+  top: 18px;
+  right: 2%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  width: 92px;
+  height: 92px;
+  border: 1.5px solid var(--yellow);
+  border-radius: 50%;
+  outline: 1px solid rgba(248, 190, 59, 0.35);
+  outline-offset: 4px;
+  background: var(--bg);
+  color: var(--yellow);
+  line-height: 1;
+  text-align: center;
+  rotate: 10deg;
+}
+
+.about__stamp-small {
+  color: var(--text-2);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.about__stamp-big {
+  margin-top: 2px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.about__copy {
+  max-width: 620px;
+}
+
+.about__text {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+  color: var(--text-2);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+}
+
+.about__text p:first-child {
+  color: var(--text);
+  font-size: var(--fs-lead);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.about__range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+}
+
+.about__range li {
+  padding: 6px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-s);
+  color: var(--text-2);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+@media (min-width: 1024px) {
+  .about__grid {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: var(--space-16);
+  }
+}

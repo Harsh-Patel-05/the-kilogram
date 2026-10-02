@@ -1,0 +1,143 @@
+.popular {
+  padding-top: clamp(40px, 6vw, 80px);
+}
+
+.popular__list {
+  padding-top: var(--space-1);
+}
+
+.popular__item {
+  width: min(78vw, 290px);
+}
+
+.pcard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  transition:
+    border-color 0.3s,
+    transform 0.3s var(--ease-out);
+}
+
+.pcard__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.pcard__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.pcard__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--space-4) var(--space-5) var(--space-3);
+}
+
+.pcard__name {
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+}
+
+.pcard__text {
+  margin-top: var(--space-2);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+}
+
+.pcard__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-3);
+}
+
+.pcard__price {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.pcard__price strong {
+  color: var(--yellow);
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.pcard__from,
+.pcard__unit {
+  color: var(--text-3);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+}
+
+.pcard__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.pcard__link svg {
+  width: 16px;
+  height: 16px;
+  color: var(--blue);
+  transition: transform 0.2s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .pcard:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+  }
+  .pcard:hover .pcard__media img {
+    transform: scale(1.04);
+  }
+  .pcard__link:hover {
+    color: var(--text);
+  }
+  .pcard:hover .pcard__link svg {
+    transform: translateX(3px);
+  }
+}
+
+@media (min-width: 768px) {
+  .popular__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5);
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow: visible;
+  }
+  .popular__item {
+    width: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .popular__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+}

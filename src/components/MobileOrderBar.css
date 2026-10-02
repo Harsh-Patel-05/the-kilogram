@@ -1,0 +1,85 @@
+.orderbar {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 90;
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr;
+  gap: 8px;
+  padding: 8px var(--gutter) calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: rgba(10, 11, 11, 0.95);
+  box-shadow: 0 -12px 30px -16px rgba(0, 0, 0, 0.9);
+  transform: translateY(110%);
+  transition: transform 0.5s var(--ease-out);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .orderbar {
+    background: rgba(10, 11, 11, 0.82);
+    backdrop-filter: blur(16px) saturate(140%);
+  }
+}
+
+.is-loaded .orderbar {
+  transform: none;
+}
+
+.orderbar__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: transform 0.15s, background-color 0.2s;
+}
+
+.orderbar__btn svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  color: var(--text-2);
+}
+
+.orderbar__btn--call {
+  border-color: var(--red-cta);
+  background: var(--red-cta);
+  color: #fff;
+}
+
+.orderbar__btn--call svg {
+  color: #fff;
+}
+
+.orderbar__btn:active {
+  transform: scale(0.96);
+}
+
+@media (max-width: 559px) {
+  .orderbar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .orderbar__btn {
+    flex-direction: column;
+    gap: 3px;
+    min-height: 52px;
+    font-size: 0.6875rem;
+  }
+}
+
+@media (min-width: 560px) {
+  .orderbar {
+    grid-template-columns: 1.25fr 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .orderbar {
+    display: none;
+  }
+}

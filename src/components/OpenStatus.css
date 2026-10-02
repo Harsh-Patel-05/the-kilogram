@@ -1,0 +1,54 @@
+.open-status {
+  --status: #3fd07f;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  padding: 6px 12px 6px 10px;
+  border: 1px solid color-mix(in srgb, var(--status) 40%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--status) 10%, transparent);
+  color: var(--text-2);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.open-status strong {
+  color: var(--status);
+  font-weight: 600;
+}
+
+.open-status__dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--status);
+}
+
+.open-status--open .open-status__dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--status);
+  animation: status-ping 2s var(--ease-out) infinite;
+}
+
+.open-status--closing,
+.open-status--opening {
+  --status: var(--yellow);
+}
+
+.open-status--closed {
+  --status: #ff6b6d;
+}
+
+@keyframes status-ping {
+  to {
+    opacity: 0;
+    scale: 2.6;
+  }
+}

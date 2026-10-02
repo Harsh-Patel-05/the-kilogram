@@ -1,0 +1,136 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  height: var(--header-h);
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 0.35s,
+    border-color 0.35s,
+    box-shadow 0.35s;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -24px;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(10, 11, 11, 0.85), transparent);
+  transition: opacity 0.35s;
+}
+
+.header.is-scrolled {
+  background: rgba(10, 11, 11, 0.94);
+  border-bottom-color: var(--line);
+  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.9);
+}
+
+.header.is-scrolled::before {
+  opacity: 0;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .header.is-scrolled {
+    background: rgba(10, 11, 11, 0.82);
+    backdrop-filter: blur(14px) saturate(140%);
+  }
+}
+
+.header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 100%;
+}
+
+.header__brand {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  flex: none;
+}
+
+.header__nav,
+.header__cta {
+  display: none;
+}
+
+.header__burger {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -4px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.header__burger svg {
+  width: 22px;
+  height: 22px;
+}
+
+.header__burger:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@media (min-width: 1024px) {
+  .header__burger {
+    display: none;
+  }
+
+  .header__nav {
+    display: block;
+  }
+
+  .header__nav ul {
+    display: flex;
+    gap: clamp(12px, 2vw, 28px);
+  }
+
+  .header__nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 4px;
+    color: var(--text-2);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .header__nav a::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 6px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--blue);
+    transform: scaleX(0);
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .header__nav a:hover,
+  .header__nav a.is-active {
+    color: var(--text);
+  }
+
+  .header__nav a.is-active::after,
+  .header__nav a:hover::after {
+    transform: scaleX(1);
+  }
+
+  .header__cta {
+    display: inline-flex;
+    min-height: 44px;
+    padding-inline: 18px;
+    font-size: var(--fs-sm);
+  }
+}

@@ -1,0 +1,126 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(60% 45% at 50% 45%, rgba(58, 170, 225, 0.08), transparent 70%),
+    var(--bg);
+  transition:
+    opacity 0.45s var(--ease-out),
+    visibility 0.45s;
+}
+
+.loader.is-leaving {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: min(68vw, 280px);
+  transition: transform 0.45s var(--ease-out);
+}
+
+.loader.is-leaving .loader__inner {
+  transform: scale(0.94) translateY(-8px);
+}
+
+/* Pivot sits on the fulcrum tip of the scale artwork */
+.loader__mark {
+  width: 100%;
+  transform-origin: 51.5% 66%;
+  animation:
+    loader-in 0.5s var(--ease-out) both,
+    loader-balance 1.3s var(--ease-out) 0.15s both;
+}
+
+.loader__word {
+  width: 92%;
+  clip-path: inset(0 100% 0 0);
+  animation: loader-wipe 0.6s var(--ease-out) 0.75s forwards;
+}
+
+.loader__line {
+  display: flex;
+  gap: 6px;
+  width: 64%;
+  height: 3px;
+}
+
+.loader__line i {
+  flex: 1;
+  border-radius: 3px;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: loader-bar 0.45s var(--ease-out) forwards;
+}
+
+.loader__line i:nth-child(1) {
+  background: var(--red);
+  animation-delay: 0.9s;
+}
+
+.loader__line i:nth-child(2) {
+  background: var(--yellow);
+  animation-delay: 1.02s;
+}
+
+.loader__line i:nth-child(3) {
+  background: var(--blue);
+  animation-delay: 1.14s;
+}
+
+@keyframes loader-in {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes loader-balance {
+  0% {
+    rotate: -7deg;
+  }
+  35% {
+    rotate: 4deg;
+  }
+  62% {
+    rotate: -1.8deg;
+  }
+  82% {
+    rotate: 0.7deg;
+  }
+  100% {
+    rotate: 0deg;
+  }
+}
+
+@keyframes loader-wipe {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes loader-bar {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader__word {
+    clip-path: none;
+  }
+  .loader__line i {
+    transform: none;
+  }
+}

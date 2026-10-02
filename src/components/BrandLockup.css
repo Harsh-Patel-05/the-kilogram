@@ -1,0 +1,25 @@
+.lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lockup__mark {
+  width: auto;
+  height: 38px;
+}
+
+.lockup__word {
+  width: auto;
+  height: 15px;
+  margin-top: 6px;
+}
+
+@media (min-width: 1024px) {
+  .lockup__mark {
+    height: 42px;
+  }
+  .lockup__word {
+    height: 17px;
+  }
+}

@@ -1,0 +1,155 @@
+.fab {
+  position: fixed;
+  right: calc(14px + env(safe-area-inset-right));
+  bottom: calc(var(--bar-h) + 16px + env(safe-area-inset-bottom));
+  z-index: 85;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out) 0.6s;
+}
+
+.is-loaded .fab {
+  opacity: 1;
+}
+
+.fab__btn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  pointer-events: auto;
+  transition:
+    transform 0.25s var(--ease-out),
+    opacity 0.3s,
+    visibility 0.3s,
+    background-color 0.25s;
+}
+
+.fab__btn:active {
+  transform: scale(0.92);
+}
+
+.fab__btn--wa {
+  width: 56px;
+  height: 56px;
+  background: #25d366;
+  color: #fff;
+  box-shadow:
+    0 10px 26px -8px rgba(37, 211, 102, 0.6),
+    0 0 0 4px rgba(10, 11, 11, 0.55);
+}
+
+.fab__btn--wa svg {
+  width: 30px;
+  height: 30px;
+}
+
+.fab__btn--top {
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--line-strong);
+  background: rgba(25, 28, 28, 0.92);
+  color: var(--yellow);
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+}
+
+.fab__btn--top.is-shown {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.fab__btn--top svg {
+  width: 22px;
+  height: 22px;
+}
+
+.fab__tip {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  padding: 7px 12px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  translate: 6px -50%;
+  pointer-events: none;
+  transition:
+    opacity 0.2s,
+    translate 0.2s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .fab__btn--wa:hover {
+    transform: translateY(-3px);
+    background: #1ebe5a;
+  }
+  .fab__btn--wa:hover .fab__tip,
+  .fab__btn--wa:focus-visible .fab__tip {
+    opacity: 1;
+    translate: 0 -50%;
+  }
+  .fab__btn--top:hover {
+    border-color: var(--yellow);
+    transform: translateY(-3px);
+  }
+}
+
+.fab__btn:focus-visible {
+  outline-offset: 4px;
+  border-radius: 50%;
+}
+
+/* On phones and tablets the button would cover the hero's order buttons, so it waits for the first scroll. */
+@media (max-width: 1023px) {
+  .fab {
+    right: calc(12px + env(safe-area-inset-right));
+    bottom: calc(var(--bar-h) + 12px + env(safe-area-inset-bottom));
+    gap: 10px;
+  }
+  .fab__btn--wa {
+    width: 50px;
+    height: 50px;
+  }
+  .fab__btn--wa svg {
+    width: 26px;
+    height: 26px;
+  }
+  .fab__btn--top {
+    width: 40px;
+    height: 40px;
+  }
+  .fab__btn--top svg {
+    width: 20px;
+    height: 20px;
+  }
+  .fab--tucked .fab__btn {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px) scale(0.9);
+  }
+  .fab__btn--wa:not(.is-shown) {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.85);
+  }
+}
+
+@media (min-width: 1024px) {
+  .fab {
+    right: 24px;
+    bottom: 24px;
+  }
+}
