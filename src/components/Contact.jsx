@@ -60,12 +60,15 @@ export default function Contact() {
               Swiggy, Zomato or Toing and have it delivered.
             </p>
 
-            <div className="contact__phone">
-              <span>For order call</span>
-              <a href={site.phoneHref}>
-                <small>{site.phoneCountryCode}</small> {site.phoneLocal}
-              </a>
-            </div>
+            <a className="contact__phone" href={site.phoneHref}>
+              <span className="contact__phone-icon" aria-hidden="true">
+                <Phone />
+              </span>
+              <span className="contact__phone-text">
+                <span className="contact__phone-label">For orders call</span>
+                <span className="contact__phone-number">{site.phoneDisplay}</span>
+              </span>
+            </a>
 
             <div className="contact__ctas">
               <a className="btn btn--red" href={site.phoneHref}>
