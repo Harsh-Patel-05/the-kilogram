@@ -99,16 +99,6 @@
   line-height: 1.2;
 }
 
-.mmenu__num {
-  width: 24px;
-  color: var(--text-3);
-  font-family: var(--font-body);
-  font-size: var(--fs-xs);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-}
-
 .mmenu__arrow {
   width: 18px;
   height: 18px;
@@ -136,50 +126,110 @@
 .mmenu__info {
   margin-top: auto;
   padding-top: var(--space-8);
-  display: grid;
-  gap: var(--space-4);
-  color: var(--text-2);
-  font-size: var(--fs-sm);
+}
+
+.mmenu__info > * {
+  padding: var(--space-4) var(--space-4);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mmenu__info > :first-child {
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.mmenu__info > :last-child {
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.mmenu__info > * + * {
+  border-top: 0;
+}
+
+.mmenu__label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  color: var(--text-3);
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mmenu__label svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
 }
 
 .mmenu__hours {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 12px;
+  gap: 2px var(--space-3);
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.mmenu__hours dt {
+  flex-basis: 100%;
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.mmenu__hours dd {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  color: var(--text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mmenu__hours dd + dd::before {
+  content: '';
+  width: 1px;
+  height: 14px;
+  background: var(--line-strong);
+}
+
+.mmenu__status {
+  margin-top: var(--space-3);
+}
+
+@media (max-width: 379px) {
+  .mmenu__status {
+    border-radius: var(--radius);
+  }
+  .mmenu__status .open-status__sep {
+    display: none;
+  }
+  .mmenu__status .open-status__detail {
+    flex-basis: 100%;
+    padding-left: 14px;
+  }
 }
 
 .mmenu__phone {
-  display: flex;
-  flex-direction: column;
-}
-
-.mmenu__phone span {
-  color: var(--text-3);
-  font-size: var(--fs-xs);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.mmenu__phone a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
   color: var(--yellow);
   font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 600;
+  line-height: 1.2;
   font-variant-numeric: tabular-nums;
 }
 
 .mmenu__addr {
-  display: flex;
-  gap: 10px;
-  line-height: 1.5;
-}
-
-.mmenu__addr svg {
-  width: 18px;
-  height: 18px;
-  flex: none;
-  margin-top: 2px;
-  color: var(--text-3);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
 }

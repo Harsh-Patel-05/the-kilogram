@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowRight, BookOpen, MapPin, Phone, X } from 'lucide-react';
+import { ArrowRight, BookOpen, Clock, MapPin, Phone, X } from 'lucide-react';
 import BrandLockup from './BrandLockup.jsx';
 import DeliveryLinks from './DeliveryLinks.jsx';
-import HoursText from './HoursText.jsx';
 import OpenStatus from './OpenStatus.jsx';
-import { navLinks, site } from '../data/site.js';
+import { hours, navLinks, site } from '../data/site.js';
 import './MobileMenu.css';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
@@ -86,9 +85,6 @@ export default function MobileMenu({ open, onClose, returnFocusRef }) {
             {navLinks.map((link, i) => (
               <li key={link.href} style={{ '--i': i }}>
                 <a href={link.href} onClick={(e) => goTo(e, link.href)}>
-                  <span className="mmenu__num" aria-hidden="true">
-                    0{i + 1}
-                  </span>
                   {link.label}
                   <ArrowRight className="mmenu__arrow" aria-hidden="true" />
                 </a>
@@ -110,20 +106,37 @@ export default function MobileMenu({ open, onClose, returnFocusRef }) {
         </div>
 
         <div className="mmenu__info">
-          <div className="mmenu__hours">
-            <OpenStatus />
-            <span>
-              <HoursText />
-            </span>
+          <div className="mmenu__block">
+            <h2 className="mmenu__label">
+              <Clock aria-hidden="true" />
+              Opening hours
+            </h2>
+            <dl className="mmenu__hours">
+              <dt>{hours.daysLabel}</dt>
+              {hours.slots.map((slot) => (
+                <dd key={slot.open}>
+                  {slot.openLabel} – {slot.closeLabel}
+                </dd>
+              ))}
+            </dl>
+            <OpenStatus className="mmenu__status" />
           </div>
-          <p className="mmenu__phone">
-            <span>For orders call</span>
-            <a href={site.phoneHref}>{site.phoneDisplay}</a>
-          </p>
-          <p className="mmenu__addr">
-            <MapPin aria-hidden="true" />
-            <span>{site.addressOneLine}</span>
-          </p>
+          <div className="mmenu__block">
+            <h2 className="mmenu__label">
+              <Phone aria-hidden="true" />
+              For orders call
+            </h2>
+            <a className="mmenu__phone" href={site.phoneHref}>
+              {site.phoneDisplay}
+            </a>
+          </div>
+          <div className="mmenu__block">
+            <h2 className="mmenu__label">
+              <MapPin aria-hidden="true" />
+              Find us
+            </h2>
+            <p className="mmenu__addr">{site.addressOneLine}</p>
+          </div>
         </div>
       </div>
     </div>,

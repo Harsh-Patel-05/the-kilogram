@@ -1,8 +1,19 @@
 import { Clock, MapPin, Phone } from 'lucide-react';
 import logo from '../assets/logo/logo.webp';
 import HoursText from './HoursText.jsx';
-import { navLinks, site } from '../data/site.js';
+import { site } from '../data/site.js';
 import './Footer.css';
+
+/** Same order as the sections on the page. */
+const footerLinks = [
+  { href: '#home', label: 'Home' },
+  { href: '#combos', label: 'Family Combos' },
+  { href: '#menu', label: 'Menu' },
+  { href: '#about', label: 'About' },
+  { href: '#why-us', label: 'Why Us' },
+  { href: '#reviews', label: 'Reviews' },
+  { href: '#contact', label: 'Contact' },
+];
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -24,17 +35,11 @@ export default function Footer() {
         <nav className="footer__nav" aria-label="Footer">
           <h2 className="footer__heading">Explore</h2>
           <ul>
-            {navLinks.map((l) => (
+            {footerLinks.map((l) => (
               <li key={l.href}>
                 <a href={l.href}>{l.label}</a>
               </li>
             ))}
-            <li>
-              <a href="#combos">Family Combos</a>
-            </li>
-            <li>
-              <a href="#why-us">Why Us</a>
-            </li>
           </ul>
         </nav>
 
