@@ -23,14 +23,41 @@
 
 .contact__phone {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
+  align-items: center;
+  gap: var(--space-4);
+  width: fit-content;
+  max-width: 100%;
   margin-top: var(--space-6);
-  padding-bottom: var(--space-5);
-  border-bottom: 1px solid var(--line);
 }
 
-.contact__phone span {
+.contact__phone-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  flex: none;
+  border: 1px solid rgba(248, 190, 59, 0.3);
+  border-radius: var(--radius);
+  background: var(--yellow-soft);
+  color: var(--yellow);
+  transition:
+    background-color 0.25s,
+    border-color 0.25s;
+}
+
+.contact__phone-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.contact__phone-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.contact__phone-label {
   color: var(--text-3);
   font-size: var(--fs-xs);
   font-weight: 600;
@@ -38,25 +65,39 @@
   text-transform: uppercase;
 }
 
-.contact__phone a {
-  display: flex;
-  align-items: baseline;
-  gap: 0.2em;
-  min-height: 44px;
+.contact__phone-number {
   color: var(--yellow);
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 8.4vw, 3.25rem);
+  font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.125rem);
   font-weight: 700;
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-.contact__phone a small {
-  font-size: 0.5em;
-  font-weight: 600;
-  color: var(--text-2);
+@media (max-width: 379px) {
+  .contact__phone {
+    gap: var(--space-3);
+  }
+  .contact__phone-icon {
+    width: 44px;
+    height: 44px;
+  }
+  .contact__phone-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .contact__phone-number {
+    font-size: 1.25rem;
+  }
+}
+
+@media (hover: hover) {
+  .contact__phone:hover .contact__phone-icon {
+    border-color: var(--yellow);
+    background: rgba(248, 190, 59, 0.2);
+  }
 }
 
 .contact__ctas {
