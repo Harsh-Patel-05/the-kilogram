@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Phone, Search, X } from 'lucide-react';
 import MenuCategory from './MenuCategory.jsx';
-import { menuGroups } from '../data/menu.js';
+import { useMenu } from '../context/MenuContext.jsx';
 import { filterMenu } from '../lib/menuSearch.js';
 import { MENU_JUMP_EVENT } from '../lib/menuNav.js';
 import { site } from '../data/site.js';
 import './MenuSection.css';
 
 const ALL = 'all';
-const suggestions = ['Paneer', 'Noodles', 'Dal', 'Biryani'];
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export default function MenuSection() {
+  const { menuGroups, loading, error, itemCount } = useMenu();
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(ALL);
   const listRef = useRef(null);
@@ -20,7 +20,15 @@ export default function MenuSection() {
   const inputRef = useRef(null);
   const pendingJump = useRef(false);
 
-  const { groups: matched, count } = useMemo(() => filterMenu(menuGroups, query), [query]);
+  const suggestions = useMemo(() => {
+    const names = menuGroups
+      .flatMap((g) => g.categories.flatMap((c) => c.items.map((i) => i.name)))
+      .filter(Boolean);
+    const uniq = [...new Set(names.map((n) => n.split(/\s+/)[0]))].slice(0, 4);
+    return uniq.length ? uniq : ['Bhaji', 'Pulao', 'Paneer', 'Dal'];
+  }, [menuGroups]);
+
+  const { groups: matched, count } = useMemo(() => filterMenu(menuGroups, query), [menuGroups, query]);
   const searching = count !== null;
   const availableIds = useMemo(() => new Set(matched.map((g) => g.id)), [matched]);
   const effectiveActive = active !== ALL && availableIds.has(active) ? active : ALL;
@@ -89,23 +97,27 @@ export default function MenuSection() {
     inputRef.current?.focus();
   };
 
-  const statusText = searching
-    ? count === 0
-      ? `No dishes match “${query.trim()}”`
-      : `${count} ${count === 1 ? 'dish matches' : 'dishes match'} “${query.trim()}”`
-    : '';
+  const statusText = loading
+    ? 'Loading live menu…'
+    : error
+      ? 'Couldn’t load the live menu.'
+      : searching
+        ? count === 0
+          ? `No dishes match “${query.trim()}”`
+          : `${count} ${count === 1 ? 'dish matches' : 'dishes match'} “${query.trim()}”`
+        : itemCount
+          ? `${itemCount} dishes · updated live from the kitchen`
+          : '';
 
   return (
     <section id="menu" className="section menu" aria-labelledby="menu-title">
       <div className="container">
         <div className="section-head section-head--center menu__head" data-reveal>
-          <p className="eyebrow">
-            Takeaway menu
-          </p>
+          <p className="eyebrow">Takeaway menu</p>
           <h2 id="menu-title" className="section-title">
             Our Menu
           </h2>
-          <p className="section-sub">Pick your favourites. Choose your portion. Enjoy.</p>
+          <p className="section-sub">Pick your favourites. Choose your portion. Order online.</p>
         </div>
 
         <form className="menu__search" role="search" onSubmit={onSearchSubmit}>
@@ -124,6 +136,7 @@ export default function MenuSection() {
             placeholder="Search dishes..."
             value={query}
             onChange={onSearchChange}
+            disabled={loading || !!error || !itemCount}
           />
           {query && (
             <button type="button" className="menu__search-clear" onClick={clearSearch} aria-label="Clear search">
@@ -132,57 +145,88 @@ export default function MenuSection() {
           )}
         </form>
 
-        <div className="menu__chipbar" ref={chipsRef}>
-          <div className="menu__chips" role="group" aria-label="Menu categories">
-            {[{ id: ALL, label: 'All' }, ...menuGroups]
-              .filter((g) => g.id === ALL || availableIds.has(g.id))
-              .map((g) => (
-                <button
-                  key={g.id}
-                  type="button"
-                  data-chip={g.id}
-                  className={`chip${effectiveActive === g.id ? ' is-active' : ''}`}
-                  aria-pressed={effectiveActive === g.id}
-                  onClick={() => selectChip(g.id)}
-                >
-                  {g.label}
-                </button>
-              ))}
+        {!loading && !error && itemCount > 0 && (
+          <div className="menu__chipbar" ref={chipsRef}>
+            <div className="menu__chips" role="group" aria-label="Menu categories">
+              {[{ id: ALL, label: 'All' }, ...menuGroups]
+                .filter((g) => g.id === ALL || availableIds.has(g.id))
+                .map((g) => (
+                  <button
+                    key={g.id}
+                    type="button"
+                    data-chip={g.id}
+                    className={`chip${effectiveActive === g.id ? ' is-active' : ''}`}
+                    aria-pressed={effectiveActive === g.id}
+                    onClick={() => selectChip(g.id)}
+                  >
+                    {g.label}
+                  </button>
+                ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <p className="menu__status" aria-live="polite">
           {statusText}
         </p>
 
         <div ref={listRef} className="menu__list" key={effectiveActive}>
-          {visible.map((group) => {
-            const multi = group.categories.length > 1;
-            const single = !multi && group.categories[0].title === group.heading;
-            return (
-              <section
-                key={group.id}
-                className={`menu-group${multi ? ' is-multi' : ''}`}
-                aria-labelledby={`mg-${group.id}`}
-              >
-                <h3 id={`mg-${group.id}`} className="menu-group__title">
-                  {group.heading}
-                </h3>
-                <div className={`menu-group__cats${multi ? ' is-multi' : ''}`}>
-                  {group.categories.map((category) => (
-                    <MenuCategory
-                      key={category.id}
-                      category={category}
-                      showTitle={!single}
-                      headingId={`mc-${category.id}`}
-                    />
-                  ))}
-                </div>
-              </section>
-            );
-          })}
+          {loading && (
+            <div className="menu__empty" role="status">
+              <p className="menu__empty-title">Loading menu…</p>
+              <p>Pulling the latest dishes from the kitchen.</p>
+            </div>
+          )}
 
-          {searching && count === 0 && (
+          {!loading && error && (
+            <div className="menu__empty" role="alert">
+              <p className="menu__empty-title">Menu is temporarily unavailable.</p>
+              <p>Please refresh the page, or call us to place your order.</p>
+              <p>
+                <a className="btn btn--red" href={site.phoneHref}>
+                  <Phone aria-hidden="true" />
+                  Call {site.phoneDisplay}
+                </a>
+              </p>
+            </div>
+          )}
+
+          {!loading && !error && !itemCount && (
+            <div className="menu__empty">
+              <p className="menu__empty-title">No dishes published yet.</p>
+              <p>Add items in the restaurant Menu page — they’ll show here automatically.</p>
+            </div>
+          )}
+
+          {!loading &&
+            !error &&
+            visible.map((group) => {
+              const multi = group.categories.length > 1;
+              const single = !multi && group.categories[0].title === group.heading;
+              return (
+                <section
+                  key={group.id}
+                  className={`menu-group${multi ? ' is-multi' : ''}`}
+                  aria-labelledby={`mg-${group.id}`}
+                >
+                  <h3 id={`mg-${group.id}`} className="menu-group__title">
+                    {group.heading}
+                  </h3>
+                  <div className={`menu-group__cats${multi ? ' is-multi' : ''}`}>
+                    {group.categories.map((category) => (
+                      <MenuCategory
+                        key={category.id}
+                        category={category}
+                        showTitle={!single}
+                        headingId={`mc-${category.id}`}
+                      />
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+
+          {!loading && !error && searching && count === 0 && (
             <div className="menu__empty">
               <p className="menu__empty-title">We couldn’t find that one.</p>
               <p>Check the spelling, or try one of these:</p>

@@ -248,7 +248,12 @@ p {
 .section {
   position: relative;
   padding-block: var(--section-y);
-  scroll-margin-top: var(--header-h);
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+
+/* Hash targets (nav links) should clear the fixed header */
+[id] {
+  scroll-margin-top: calc(var(--header-h) + 12px);
 }
 
 /* ---------- Section headings ---------- */

@@ -49,8 +49,8 @@ export default function About() {
             </p>
             <p>
               The menu runs from buttery bhaji and pau to pulao, Indo-Chinese starters, noodles and fried rice,
-              Punjabi sabzis, paneer and kaju curries, dal, biryani and rotis. Most of it comes by the 500 gm or
-              the kilo, because food tastes better when there’s enough on the table for everyone.
+              Punjabi sabzis, paneer and kaju curries, dal, biryani and rotis. Portions are sized for sharing —
+              check today’s menu for what’s on and how it’s sold.
             </p>
             <p>
               Everything is vegetarian and cooked in groundnut oil, with Amul for our dairy. Jain and

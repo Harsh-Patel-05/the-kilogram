@@ -42,7 +42,7 @@ const reasons = [
   {
     Icon: PortionIcon,
     title: 'Generous portions',
-    text: 'Most dishes come by the 500 gm or 1 kg, so there’s enough to go round — and maybe some for tomorrow.',
+    text: 'Portions are built for sharing, so there’s enough to go round — and maybe some for tomorrow.',
   },
   {
     Icon: FreshIcon,
@@ -57,7 +57,7 @@ const reasons = [
   {
     Icon: FamilyIcon,
     title: 'Perfect for family meals',
-    text: 'Combos put bhaji, pulao and pau in one order, so feeding everyone is one phone call.',
+    text: 'Combos put bhaji, pulao and pau in one order — add them online or give us a call.',
   },
 ];
 

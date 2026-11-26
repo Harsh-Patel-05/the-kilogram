@@ -32,6 +32,7 @@ export default function Gallery() {
           <h2 id="gallery-title" className="section-title">
             A few things <em>worth ordering</em>
           </h2>
+          <p className="section-sub">Kitchen favourites — check today’s live menu for current dishes and prices.</p>
         </div>
 
         <ul className="gallery__grid">

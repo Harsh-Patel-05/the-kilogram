@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { ArrowRight, Leaf, MapPin, Phone, Weight } from 'lucide-react';
+import { ArrowRight, Leaf, MapPin, ShoppingBag, Weight } from 'lucide-react';
 import useInView from '../hooks/useInView.js';
 import logo from '../assets/logo/logo.webp';
 import heroLarge from '../assets/food/hero-spread.webp';
@@ -7,17 +7,21 @@ import heroSmall from '../assets/food/hero-spread-600.webp';
 import DeliveryLinks from './DeliveryLinks.jsx';
 import OpenStatus from './OpenStatus.jsx';
 import { site } from '../data/site.js';
+import { useMenu } from '../context/MenuContext.jsx';
+import { menuStartingOffer, formatPrice } from '../data/menu.js';
 import './Hero.css';
 
 const trust = [
   { icon: <Leaf aria-hidden="true" />, text: 'All-vegetarian menu' },
-  { icon: <Weight aria-hidden="true" />, text: '500 gm & 1 kg portions' },
+  { icon: <Weight aria-hidden="true" />, text: 'Family portions by weight' },
   { icon: <span className="hero__trust-dot" aria-hidden="true" />, text: 'Jain & Swaminarayan options' },
 ];
 
 export default function Hero() {
   const ref = useRef(null);
   const inView = useInView(ref);
+  const { menuGroups, loading } = useMenu();
+  const offer = menuStartingOffer(menuGroups);
 
   return (
     <section ref={ref} id="home" className={`hero${inView ? '' : ' is-offscreen'}`} aria-labelledby="hero-title">
@@ -56,13 +60,13 @@ export default function Hero() {
           </p>
 
           <div className="hero__ctas">
-            <a href="#menu" className="btn btn--ghost">
-              View Menu
-              <ArrowRight aria-hidden="true" />
+            <a href="#menu" className="btn btn--red">
+              <ShoppingBag aria-hidden="true" />
+              Order Online
             </a>
-            <a href={site.phoneHref} className="btn btn--red">
-              <Phone aria-hidden="true" />
-              Call to Order
+            <a href={site.phoneHref} className="btn btn--ghost">
+              Call {site.phoneDisplay}
+              <ArrowRight aria-hidden="true" />
             </a>
           </div>
 
@@ -95,11 +99,13 @@ export default function Hero() {
               decoding="async"
             />
             <img className="hero__logo" src={logo} alt="The Kilogram logo" width="414" height="330" />
-            <p className="hero__tag">
-              <span>Bhaji from</span>
-              <strong>₹120</strong>
-              <span>per 500 gm</span>
-            </p>
+            {!loading && offer.price != null && (
+              <p className="hero__tag">
+                <span>From</span>
+                <strong>{formatPrice(offer.price)}</strong>
+                <span>{offer.label ? `per ${offer.label}` : 'on the menu'}</span>
+              </p>
+            )}
           </div>
         </div>
       </div>
