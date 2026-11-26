@@ -16,13 +16,13 @@
   --text-2: #c4c7c7;
   --text-3: #939898;
 
-  --font-display: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-body: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Syne', 'Poppins', system-ui, sans-serif;
+  --font-body: 'Figtree', 'Inter Variable', system-ui, sans-serif;
 
   /* Type scale */
   --fs-h1: clamp(2.35rem, 1.4rem + 3.2vw, 4rem);
-  --fs-h2: clamp(1.75rem, 1.25rem + 1.8vw, 2.75rem);
-  --fs-h3: clamp(1.0625rem, 1rem + 0.35vw, 1.3rem);
+  --fs-h2: clamp(1.7rem, 1.2rem + 1.7vw, 2.55rem);
+  --fs-h3: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
   --fs-lead: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
   --fs-body: 1rem;
   --fs-sm: 0.875rem;
@@ -46,10 +46,10 @@
   --radius-xl: 20px;
 
   --header-h: 64px;
-  --bar-h: 64px;
-  --container: 1200px;
-  --gutter: clamp(16px, 4.5vw, 32px);
-  --section-y: clamp(56px, 40px + 4vw, 100px);
+  --bar-h: 72px;
+  --container: 1120px;
+  --gutter: clamp(18px, 4.5vw, 28px);
+  --section-y: clamp(64px, 48px + 5vw, 112px);
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
@@ -251,6 +251,20 @@ p {
   scroll-margin-top: calc(var(--header-h) + 12px);
 }
 
+.section--band {
+  background:
+    radial-gradient(70% 50% at 50% 0%, rgba(58, 170, 225, 0.06), transparent 65%),
+    var(--surface);
+}
+
+.section--quiet {
+  background: transparent;
+}
+
+.section + .section {
+  border-top: 1px solid transparent;
+}
+
 /* Hash targets (nav links) should clear the fixed header */
 [id] {
   scroll-margin-top: calc(var(--header-h) + 12px);
@@ -281,8 +295,8 @@ p {
 }
 
 .section-head {
-  max-width: 640px;
-  margin-bottom: clamp(28px, 20px + 2vw, 44px);
+  max-width: 560px;
+  margin-bottom: clamp(28px, 22px + 2vw, 48px);
 }
 
 .section-head--center {

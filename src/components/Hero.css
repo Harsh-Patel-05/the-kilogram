@@ -1,104 +1,74 @@
 .hero {
   position: relative;
-  padding-top: calc(var(--header-h) + clamp(24px, 5vw, 48px));
-  padding-bottom: clamp(48px, 8vw, 88px);
-  overflow: hidden;
   isolation: isolate;
-  background:
-    radial-gradient(70% 50% at 85% 30%, rgba(58, 170, 225, 0.1), transparent 70%),
-    radial-gradient(50% 40% at 0% 100%, rgba(234, 61, 63, 0.08), transparent 70%);
-}
-
-.hero__lines {
-  position: absolute;
-  z-index: -1;
-  top: 8%;
-  right: -30%;
-  width: 130%;
-  max-width: 1100px;
-  opacity: 0.12;
-  stroke: var(--blue);
-  stroke-width: 1;
-  stroke-dasharray: 4 7;
-}
-
-.hero__grid {
   display: grid;
-  gap: clamp(40px, 7vw, 64px);
-  align-items: center;
+  align-items: end;
+  min-height: min(100svh, 760px);
+  padding-top: calc(var(--header-h) + 20px);
+  padding-bottom: clamp(36px, 7vw, 72px);
+  overflow: hidden;
+  background: #0a0b0b;
 }
 
-.hero__copy {
-  max-width: 600px;
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.hero__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% 42%;
+  transform: scale(1.04);
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(8, 9, 9, 0.72) 0%, rgba(8, 9, 9, 0.42) 38%, rgba(8, 9, 9, 0.88) 78%, #0a0b0b 100%),
+    linear-gradient(90deg, rgba(8, 9, 9, 0.82) 0%, rgba(8, 9, 9, 0.35) 55%, rgba(8, 9, 9, 0.55) 100%),
+    radial-gradient(55% 45% at 80% 20%, rgba(58, 170, 225, 0.18), transparent 70%);
+}
+
+.hero__inner {
+  position: relative;
+  max-width: 720px;
+  padding-top: clamp(24px, 6vw, 56px);
+}
+
+.hero__brand {
+  font-family: var(--font-display);
+  font-size: clamp(1.65rem, 1.1rem + 2.4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: #fff;
+  text-transform: none;
+}
+
+.hero__brand::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin-top: 12px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--red), var(--yellow), var(--blue));
 }
 
 .hero__status {
-  margin-bottom: var(--space-4);
-}
-
-.hero__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 14px;
-  color: var(--text-2);
-  font-size: var(--fs-sm);
-  font-weight: 500;
-  line-height: 1.3;
-}
-
-.hero__meta-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-
-.hero__meta-item svg {
-  width: 16px;
-  height: 16px;
-  flex: none;
-  color: var(--blue);
-}
-
-.hero__veg {
-  display: grid;
-  place-items: center;
-  width: 16px;
-  height: 16px;
-  flex: none;
-  border: 1.5px solid #3fb96b;
-  border-radius: 3px;
-}
-
-.hero__veg::after {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #3fb96b;
-}
-
-.hero__meta-sep {
-  width: 1px;
-  height: 14px;
-  background: var(--line-strong);
-}
-
-@media (max-width: 399px) {
-  .hero__meta {
-    column-gap: 18px;
-  }
-  .hero__meta-sep {
-    display: none;
-  }
+  margin-top: var(--space-5);
 }
 
 .hero__title {
   margin-top: var(--space-4);
-  font-size: var(--fs-h1);
-  line-height: 1.04;
-  letter-spacing: -0.03em;
+  font-size: clamp(2rem, 1.35rem + 3vw, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  max-width: 12ch;
 }
 
 .hero__title span {
@@ -108,231 +78,84 @@
 
 .hero__lead {
   margin-top: var(--space-5);
-  max-width: 34em;
-  color: var(--text-2);
+  max-width: 32em;
+  color: rgba(255, 255, 255, 0.82);
   font-size: var(--fs-lead);
-  line-height: 1.65;
+  line-height: 1.55;
 }
 
 .hero__ctas {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   margin-top: var(--space-8);
-}
-
-@media (min-width: 380px) {
-  .hero__ctas {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  max-width: 420px;
 }
 
 .hero__ctas .btn {
-  min-height: 50px;
-  padding-inline: 16px;
-}
-
-.hero__delivery {
-  margin-top: var(--space-6);
-}
-
-.hero__delivery-label {
-  margin-bottom: var(--space-2);
-  color: var(--text-3);
-  font-size: var(--fs-xs);
-  font-weight: 500;
-}
-
-.hero__trust {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
-  margin-top: var(--space-6);
-  padding-top: var(--space-5);
-  border-top: 1px solid var(--line);
-  color: var(--text-2);
-  font-size: 0.8125rem;
-  font-weight: 500;
-}
-
-.hero__trust li {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.hero__trust svg {
-  width: 18px;
-  height: 18px;
-  flex: none;
-  color: var(--blue);
-}
-
-.hero__trust-dot {
-  width: 8px;
-  height: 8px;
-  margin-inline: 5px;
-  border-radius: 50%;
-  background: var(--blue);
-  box-shadow: 0 0 0 4px rgba(58, 170, 225, 0.18);
-}
-
-/* ---------- Visual ---------- */
-
-.hero__visual {
-  position: relative;
   width: 100%;
-  max-width: 560px;
-  margin-inline: auto;
+  min-height: 52px;
 }
 
-.hero__plate {
-  --frame-offset: -6px;
-  position: relative;
-  aspect-ratio: 939 / 990;
+@media (min-width: 480px) {
+  .hero__ctas {
+    grid-template-columns: 1fr 1fr;
+    max-width: 480px;
+  }
 }
 
-.hero__food {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  -webkit-mask-image: radial-gradient(ellipse 58% 60% at 50% 56%, #000 55%, transparent 100%);
-  mask-image: radial-gradient(ellipse 58% 60% at 50% 56%, #000 55%, transparent 100%);
-}
-
-.hero__logo {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 40%;
-  translate: -50% 0;
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.6));
-}
-
-.hero__tag {
-  position: absolute;
-  left: 2%;
-  bottom: 7%;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  padding: 10px 14px;
-  border: 1px solid rgba(248, 190, 59, 0.5);
-  border-radius: var(--radius);
-  background: rgba(10, 11, 11, 0.88);
-  line-height: 1.2;
-  rotate: -3deg;
-}
-
-.hero__tag span {
-  color: var(--text-2);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.hero__tag strong {
-  padding-block: 2px;
-  color: var(--yellow);
-  font-family: var(--font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.1;
-}
-
-/* ---------- Entrance (runs once the intro loader is gone) ---------- */
-
-.hero__copy > *,
-.hero__tag {
+/* Entrance */
+.hero__brand,
+.hero__status,
+.hero__title,
+.hero__lead,
+.hero__ctas {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(16px);
 }
 
-.hero__food {
-  transform: scale(1.06);
-}
-
-.hero__logo {
-  opacity: 0;
-}
-
-/* Hard visibility fallback — never leave the hero blank if animation is skipped/interrupted */
-.is-loaded .hero__copy > *,
-.is-loaded .hero__tag {
+.is-loaded .hero__brand,
+.is-loaded .hero__status,
+.is-loaded .hero__title,
+.is-loaded .hero__lead,
+.is-loaded .hero__ctas {
   opacity: 1;
   transform: none;
 }
 
-.is-loaded .hero__food {
+.is-loaded .hero__photo {
   transform: none;
-}
-
-.is-loaded .hero__logo {
-  opacity: 1;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .is-loaded .hero__copy > * {
-    animation: hero-up 0.8s var(--ease-out) both;
+  .is-loaded .hero__photo {
+    animation: hero-settle 1.3s var(--ease-out) both;
   }
 
-  .is-loaded .hero__copy > :nth-child(2) {
-    animation-delay: 0.08s;
+  .is-loaded .hero__brand {
+    animation: hero-up 0.7s var(--ease-out) both;
   }
-  .is-loaded .hero__copy > :nth-child(3) {
-    animation-delay: 0.16s;
+  .is-loaded .hero__status {
+    animation: hero-up 0.7s var(--ease-out) 0.06s both;
   }
-  .is-loaded .hero__copy > :nth-child(4) {
-    animation-delay: 0.24s;
+  .is-loaded .hero__title {
+    animation: hero-up 0.75s var(--ease-out) 0.12s both;
   }
-  .is-loaded .hero__copy > :nth-child(5) {
-    animation-delay: 0.32s;
+  .is-loaded .hero__lead {
+    animation: hero-up 0.75s var(--ease-out) 0.18s both;
   }
-  .is-loaded .hero__copy > :nth-child(6) {
-    animation-delay: 0.4s;
-  }
-  .is-loaded .hero__copy > :nth-child(7) {
-    animation-delay: 0.48s;
-  }
-
-  .is-loaded .hero__food {
-    animation: hero-settle 1.4s var(--ease-out) both;
-  }
-
-  .is-loaded .hero__logo {
-    animation:
-      hero-fade 0.8s var(--ease-out) 0.2s both,
-      hero-sway 6s ease-in-out 1.2s infinite;
-    transform-origin: 51% 55%;
-  }
-
-  .is-loaded .hero__tag {
-    animation: hero-up 0.7s var(--ease-spring) 0.55s both;
-  }
-
-  .hero.is-offscreen .hero__logo {
-    animation-play-state: paused;
+  .is-loaded .hero__ctas {
+    animation: hero-up 0.75s var(--ease-out) 0.24s both;
   }
 }
 
 @keyframes hero-up {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
     transform: none;
-  }
-}
-
-@keyframes hero-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }
 
@@ -345,61 +168,42 @@
   }
 }
 
-@keyframes hero-sway {
-  0%,
-  100% {
-    rotate: 0deg;
-  }
-  50% {
-    rotate: -1.6deg;
-  }
-}
-
-@media (min-width: 480px) {
-  .hero__ctas {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .hero__ctas .btn {
-    padding-inline: 26px;
-  }
-}
-
 @media (min-width: 1024px) {
   .hero {
-    min-height: min(100svh, 860px);
-    display: flex;
     align-items: center;
+    min-height: min(100svh, 820px);
+    padding-bottom: clamp(48px, 6vw, 80px);
   }
 
-  .hero__grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+  .hero__photo {
+    object-position: 70% 40%;
   }
 
-  .hero__lines {
-    top: 4%;
-    right: -6%;
-    width: 72%;
+  .hero__scrim {
+    background:
+      linear-gradient(105deg, rgba(8, 9, 9, 0.92) 0%, rgba(8, 9, 9, 0.72) 42%, rgba(8, 9, 9, 0.28) 68%, rgba(8, 9, 9, 0.45) 100%),
+      linear-gradient(180deg, rgba(8, 9, 9, 0.45) 0%, transparent 35%, rgba(8, 9, 9, 0.75) 100%),
+      radial-gradient(45% 40% at 85% 25%, rgba(58, 170, 225, 0.2), transparent 70%);
   }
 
-  .hero__visual {
-    max-width: 540px;
-    margin-right: 0;
+  .hero__inner {
+    max-width: 560px;
+    margin-right: auto;
   }
 
-  .hero__tag {
-    left: -4%;
+  .hero__title {
+    max-width: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__copy > *,
-  .hero__tag,
-  .hero__logo {
+  .hero__brand,
+  .hero__status,
+  .hero__title,
+  .hero__lead,
+  .hero__ctas,
+  .hero__photo {
     opacity: 1;
-    transform: none;
-  }
-  .hero__food {
     transform: none;
   }
 }

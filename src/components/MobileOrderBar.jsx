@@ -1,4 +1,4 @@
-import { BookOpen, Navigation, Phone, ShoppingBag } from 'lucide-react';
+import { BookOpen, Phone, ShoppingBag } from 'lucide-react';
 import { site } from '../data/site.js';
 import { useCart } from '../context/CartContext.jsx';
 import './MobileOrderBar.css';
@@ -20,12 +20,6 @@ export default function MobileOrderBar({ onOpenCart }) {
         <ShoppingBag aria-hidden="true" />
         <span>Cart{itemCount > 0 ? ` (${itemCount})` : ''}</span>
       </button>
-      <a className="orderbar__btn" href={site.directionsHref} target="_blank" rel="noopener noreferrer">
-        <Navigation aria-hidden="true" />
-        <span>
-          Directions<span className="visually-hidden"> (opens Google Maps)</span>
-        </span>
-      </a>
     </nav>
   );
 }

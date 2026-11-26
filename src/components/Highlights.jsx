@@ -1,50 +1,34 @@
-import { CookingPot, Droplet, Milk, Weight } from 'lucide-react';
+import { Leaf, MapPin, Scale } from 'lucide-react';
+import DeliveryLinks from './DeliveryLinks.jsx';
 import './Highlights.css';
 
-const highlights = [
-  {
-    icon: <Droplet aria-hidden="true" />,
-    title: 'Cooked in groundnut oil only',
-    text: 'For everything that comes out of our kitchen.',
-    accent: 'yellow',
-  },
-  {
-    icon: <Milk aria-hidden="true" />,
-    title: 'We use Amul dairy products',
-    text: 'A name every Gujarati kitchen already trusts.',
-    accent: 'yellow',
-  },
-  {
-    icon: <CookingPot aria-hidden="true" />,
-    title: 'Freshly prepared',
-    text: 'Made in our kitchen and packed for you to take home.',
-    accent: 'blue',
-  },
-  {
-    icon: <Weight aria-hidden="true" />,
-    title: 'Family portions',
-    text: 'Order by the portion sizes listed on today’s menu.',
-    accent: 'blue',
-  },
+const points = [
+  { icon: <Leaf aria-hidden="true" />, label: '100% vegetarian' },
+  { icon: <Scale aria-hidden="true" />, label: '500 gm & 1 kg' },
+  { icon: <MapPin aria-hidden="true" />, label: 'Jagatpur, Ahmedabad' },
 ];
 
 export default function Highlights() {
   return (
-    <section className="highlights" aria-label="Kitchen highlights">
+    <section className="section section--band order-strip" aria-labelledby="order-strip-title">
       <div className="container">
-        <ul className="highlights__list">
-          {highlights.map((h, i) => (
-            <li
-              key={h.title}
-              className={`highlights__item highlights__item--${h.accent}`}
-              data-reveal
-              style={{ '--reveal-delay': i }}
-            >
-              <span className="highlights__icon">{h.icon}</span>
-              <span>
-                <strong>{h.title}</strong>
-                <span className="highlights__text">{h.text}</span>
-              </span>
+        <div className="order-strip__head" data-reveal>
+          <p className="eyebrow">Order</p>
+          <h2 id="order-strip-title" className="section-title">
+            Delivery apps <em>or call us</em>
+          </h2>
+          <p className="section-sub">Prefer Swiggy, Zomato or Toing? Same kitchen — pick what’s easiest.</p>
+        </div>
+
+        <div className="order-strip__apps" data-reveal>
+          <DeliveryLinks />
+        </div>
+
+        <ul className="order-strip__points" data-reveal>
+          {points.map((p) => (
+            <li key={p.label}>
+              {p.icon}
+              <span>{p.label}</span>
             </li>
           ))}
         </ul>

@@ -1,7 +1,13 @@
 .dlinks {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+  grid-template-columns: 1fr;
   gap: 10px;
+}
+
+@media (min-width: 560px) {
+  .dlinks {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .dlink {

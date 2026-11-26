@@ -10,7 +10,6 @@ import MenuSection from './components/MenuSection.jsx';
 import About from './components/About.jsx';
 import WhyUs from './components/WhyUs.jsx';
 import Reviews from './components/Reviews.jsx';
-import Gallery from './components/Gallery.jsx';
 import Contact from './components/Contact.jsx';
 import MobileOrderBar from './components/MobileOrderBar.jsx';
 import Footer from './components/Footer.jsx';
@@ -81,7 +80,6 @@ function HomePage({ onOpenCart }) {
         <About />
         <WhyUs />
         <Reviews />
-        <Gallery />
         <Contact />
       </main>
       <Footer />

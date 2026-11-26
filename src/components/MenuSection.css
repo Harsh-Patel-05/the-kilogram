@@ -1,5 +1,8 @@
 .menu {
-  background: radial-gradient(60% 30% at 50% 0%, rgba(58, 170, 225, 0.05), transparent 70%);
+  background:
+    radial-gradient(60% 30% at 50% 0%, rgba(58, 170, 225, 0.05), transparent 70%),
+    var(--surface);
+  border-block: 1px solid var(--line);
 }
 
 .menu__head {

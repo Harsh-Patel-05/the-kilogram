@@ -1,13 +1,9 @@
-.popular {
-  padding-top: clamp(40px, 6vw, 80px);
-}
-
 .popular__list {
   padding-top: var(--space-1);
 }
 
 .popular__item {
-  width: min(78vw, 290px);
+  width: min(76vw, 280px);
 }
 
 .pcard {
@@ -15,18 +11,17 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-l);
-  background: var(--surface);
-  transition:
-    border-color 0.3s,
-    transform 0.3s var(--ease-out);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  transition: transform 0.3s var(--ease-out);
 }
 
 .pcard__media {
   position: relative;
   aspect-ratio: 4 / 3;
   overflow: hidden;
+  border-radius: var(--radius-l);
   background: var(--surface-2);
 }
 
@@ -41,7 +36,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: var(--space-4) var(--space-5) var(--space-3);
+  padding: var(--space-4) 2px var(--space-2);
 }
 
 .pcard__name {
@@ -107,7 +102,6 @@
 
 @media (hover: hover) {
   .pcard:hover {
-    border-color: var(--line-strong);
     transform: translateY(-2px);
   }
   .pcard:hover .pcard__media img {

@@ -63,10 +63,8 @@ const reasons = [
 
 export default function WhyUs() {
   return (
-    <section id="why-us" className="section why" aria-labelledby="why-title">
+    <section id="why-us" className="section section--band why" aria-labelledby="why-title">
       <div className="container">
-        <hr className="section-rule why__divider" />
-
         <div className="section-head section-head--center" data-reveal>
           <p className="eyebrow">Why The Kilogram</p>
           <h2 id="why-title" className="section-title">

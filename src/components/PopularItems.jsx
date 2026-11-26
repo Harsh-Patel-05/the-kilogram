@@ -58,7 +58,7 @@ export default function PopularItems() {
   if (loading || error || !cards.length) return null;
 
   return (
-    <section className="section popular" aria-labelledby="popular-title">
+    <section className="section popular section--quiet" aria-labelledby="popular-title">
       <div className="container">
         <div className="section-head popular__head" data-reveal>
           <p className="eyebrow">Start here</p>

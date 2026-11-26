@@ -1,13 +1,6 @@
 .combos {
-  background: linear-gradient(180deg, transparent, rgba(248, 190, 59, 0.035) 40%, transparent);
-}
-
-.combos::before {
-  content: '';
-  position: absolute;
-  inset: 0 var(--gutter) auto;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+  position: relative;
+  background: linear-gradient(180deg, transparent, rgba(248, 190, 59, 0.04) 45%, transparent);
 }
 
 .combos__grid {
