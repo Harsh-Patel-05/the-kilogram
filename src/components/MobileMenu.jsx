@@ -5,6 +5,7 @@ import BrandLockup from './BrandLockup.jsx';
 import DeliveryLinks from './DeliveryLinks.jsx';
 import OpenStatus from './OpenStatus.jsx';
 import { hours, navLinks, site } from '../data/site.js';
+import { lockBody, unlockBody } from '../lib/bodyLock.js';
 import './MobileMenu.css';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
@@ -21,7 +22,7 @@ export default function MobileMenu({ open, onClose, returnFocusRef }) {
       return undefined;
     }
     wasOpen.current = true;
-    document.body.classList.add('is-locked');
+    lockBody();
     closeRef.current?.focus({ preventScroll: true });
 
     const onKey = (e) => {
@@ -48,7 +49,7 @@ export default function MobileMenu({ open, onClose, returnFocusRef }) {
     document.addEventListener('keydown', onKey);
     window.addEventListener('resize', onResize);
     return () => {
-      document.body.classList.remove('is-locked');
+      unlockBody();
       document.removeEventListener('keydown', onKey);
       window.removeEventListener('resize', onResize);
     };
@@ -57,8 +58,12 @@ export default function MobileMenu({ open, onClose, returnFocusRef }) {
   const goTo = (e, href) => {
     e.preventDefault();
     onClose();
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     requestAnimationFrame(() => {
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.querySelector(href)?.scrollIntoView({
+        behavior: reduce ? 'auto' : 'smooth',
+        block: 'start',
+      });
     });
   };
 
@@ -94,13 +99,13 @@ export default function MobileMenu({ open, onClose, returnFocusRef }) {
         </nav>
 
         <div className="mmenu__ctas">
-          <a className="btn btn--red" href={site.phoneHref}>
-            <Phone aria-hidden="true" />
-            Call to Order
-          </a>
-          <a className="btn btn--yellow" href="#menu" onClick={(e) => goTo(e, '#menu')}>
+          <a className="btn btn--red" href="#menu" onClick={(e) => goTo(e, '#menu')}>
             <BookOpen aria-hidden="true" />
-            View Menu
+            Order Online
+          </a>
+          <a className="btn btn--yellow" href={site.phoneHref}>
+            <Phone aria-hidden="true" />
+            Call {site.phoneDisplay}
           </a>
           <DeliveryLinks compact />
         </div>

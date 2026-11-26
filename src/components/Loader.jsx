@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import logoMark from '../assets/logo/logo-mark.webp';
 import logoWordmark from '../assets/logo/logo-wordmark.webp';
 import './Loader.css';
@@ -9,12 +9,22 @@ const EXIT_MS = 450;
 
 export default function Loader({ onDone }) {
   const [leaving, setLeaving] = useState(false);
+  const doneRef = useRef(false);
 
   useEffect(() => {
+    doneRef.current = false;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const showFor = reduce ? VISIBLE_MS_REDUCED : VISIBLE_MS;
+
+    const finish = () => {
+      if (doneRef.current) return;
+      doneRef.current = true;
+      onDone?.();
+    };
+
     const t1 = setTimeout(() => setLeaving(true), showFor);
-    const t2 = setTimeout(onDone, showFor + (reduce ? 0 : EXIT_MS));
+    const t2 = setTimeout(finish, showFor + (reduce ? 0 : EXIT_MS));
+
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -22,7 +32,13 @@ export default function Loader({ onDone }) {
   }, [onDone]);
 
   return (
-    <div className={`loader${leaving ? ' is-leaving' : ''}`} role="status" aria-live="polite">
+    <div
+      className={`loader${leaving ? ' is-leaving' : ''}`}
+      role="status"
+      aria-live="polite"
+      // While fading out, don't block the page underneath
+      style={leaving ? { pointerEvents: 'none' } : undefined}
+    >
       <span className="visually-hidden">Loading The Kilogram</span>
       <div className="loader__inner" aria-hidden="true">
         <img className="loader__mark" src={logoMark} alt="" width="414" height="272" />

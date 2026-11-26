@@ -253,6 +253,69 @@
   font-weight: 500;
 }
 
+.mi__add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 36px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(248, 190, 59, 0.22);
+  background: rgba(248, 190, 59, 0.06);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+.mi__add svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.85;
+  color: var(--yellow);
+}
+
+.mi__add:hover,
+.mi__add:focus-visible {
+  background: rgba(248, 190, 59, 0.16);
+  border-color: rgba(248, 190, 59, 0.55);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(248, 190, 59, 0.12);
+}
+
+.mi__add:active {
+  transform: scale(0.97);
+}
+
+.mc__names--orderable {
+  grid-template-columns: 1fr;
+}
+
+.mc__names--orderable li {
+  display: grid;
+  gap: 8px;
+}
+
+.mc__add-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mc__add-btn {
+  font-size: 0.75rem;
+  color: var(--yellow);
+  border-color: var(--line-strong);
+  background: var(--surface);
+}
+
+@media (min-width: 640px) {
+  .mc__names--orderable {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 .mi__price {
   color: var(--yellow);
   font-weight: 700;
@@ -284,11 +347,11 @@
 }
 
 .mi--cols-2 {
-  grid-template-columns: minmax(0, 1fr) repeat(2, 3.4rem);
+  grid-template-columns: minmax(0, 1fr) repeat(2, 4.75rem);
 }
 
 .mi--cols-3 {
-  grid-template-columns: minmax(0, 1fr) repeat(3, 3.4rem);
+  grid-template-columns: minmax(0, 1fr) repeat(3, 4.5rem);
 }
 
 /* Three portion sizes get their own row under the dish name on narrow phones */

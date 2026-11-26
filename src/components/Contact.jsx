@@ -47,17 +47,19 @@ function MapEmbed() {
 
 export default function Contact() {
   return (
-    <section id="contact" className="section contact" aria-labelledby="contact-title">
+    <section className="section contact" aria-labelledby="contact-title">
       <div className="container">
-        <div className="contact__card" data-reveal>
+        {/* id on the card so /#contact lands on content, not empty section padding */}
+        <div id="contact" className="contact__card" data-reveal>
           <div className="contact__call">
             <p className="eyebrow">Order now</p>
             <h2 id="contact-title" className="section-title">
-              Hungry? <em>Give us a call.</em>
+              Hungry? <em>Order online.</em>
             </h2>
             <p className="contact__lead">
-              Tell us what you’d like and how much of it. We’ll pack it for you to pick up, or order on
-              Swiggy, Zomato or Toing and have it delivered.
+              Order direct from this website for free delivery within 3 km — add dishes from the menu,
+              set your pin on the map, and track your order live. You can still call us, pick up, or use
+              Swiggy, Zomato or Toing.
             </p>
 
             <a className="contact__phone" href={site.phoneHref}>
@@ -71,11 +73,14 @@ export default function Contact() {
             </a>
 
             <div className="contact__ctas">
-              <a className="btn btn--red" href={site.phoneHref}>
-                <Phone aria-hidden="true" />
-                Call Now
+              <a className="btn btn--red" href="#menu">
+                Order Online
               </a>
-              <a className="btn btn--blue" href={site.directionsHref} target="_blank" rel="noopener noreferrer">
+              <a className="btn btn--blue" href={site.phoneHref}>
+                <Phone aria-hidden="true" />
+                Call {site.phoneDisplay}
+              </a>
+              <a className="btn btn--ghost" href={site.directionsHref} target="_blank" rel="noopener noreferrer">
                 <Navigation aria-hidden="true" />
                 Get Directions
                 <span className="visually-hidden"> (opens Google Maps)</span>
@@ -83,7 +88,17 @@ export default function Contact() {
             </div>
 
             <div id="order-online" className="contact__delivery">
-              <h3 className="contact__label">Or get it delivered</h3>
+              <h3 className="contact__label">Order on this website</h3>
+              <p className="contact__lead" style={{ marginBottom: 12 }}>
+                Add items from the live menu, choose delivery or pickup at checkout. Delivery within our
+                mapped radius of Jagatpur.
+              </p>
+              <a className="btn btn--yellow" href="#menu">
+                Start ordering
+              </a>
+              <h3 className="contact__label" style={{ marginTop: 20 }}>
+                Or use partner apps
+              </h3>
               <DeliveryLinks />
             </div>
           </div>

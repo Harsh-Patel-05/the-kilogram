@@ -1,0 +1,245 @@
+.kg-loc {
+  container-type: inline-size;
+  container-name: kg-loc;
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.kg-loc__intro {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: rgba(248, 190, 59, 0.08);
+  border: 1px solid rgba(248, 190, 59, 0.22);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+}
+
+.kg-loc__block {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.kg-loc__block-title {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.kg-loc__toolbar {
+  display: grid;
+  gap: 8px;
+}
+
+.kg-loc__gps {
+  width: 100%;
+  min-height: 48px;
+  justify-content: center;
+  gap: 8px;
+}
+
+.kg-loc__gps svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.kg-loc__search {
+  position: relative;
+  z-index: 5;
+  min-width: 0;
+}
+
+.kg-loc__search input {
+  width: 100%;
+  height: 48px;
+  padding: 0 44px 0 44px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.kg-loc__search input::placeholder {
+  color: var(--text-3);
+}
+
+.kg-loc__search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 18px;
+  height: 18px;
+  color: var(--text-3);
+  pointer-events: none;
+}
+
+.kg-loc__search-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: var(--text-2);
+  border-radius: var(--radius-s);
+}
+
+.kg-loc__search-clear:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+.kg-loc__suggest {
+  position: absolute;
+  z-index: 30;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  max-height: min(40vh, 220px);
+  overflow: auto;
+}
+
+.kg-loc__suggest button {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: var(--radius-s);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  line-height: 1.35;
+}
+
+.kg-loc__suggest button:hover,
+.kg-loc__suggest button:focus-visible {
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.kg-loc__suggest svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  color: var(--yellow);
+}
+
+.kg-loc__eligible {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-s);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.kg-loc__eligible.is-ok {
+  background: rgba(58, 170, 225, 0.12);
+  color: #8fd0f0;
+  border: 1px solid rgba(58, 170, 225, 0.35);
+}
+
+.kg-loc__eligible.is-no {
+  background: rgba(234, 61, 63, 0.12);
+  color: #ffb4b5;
+  border: 1px solid rgba(234, 61, 63, 0.35);
+}
+
+.kg-loc__note {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--yellow);
+  line-height: 1.4;
+}
+
+.kg-loc__hint {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+/* —— Address fields: single column by default; 2-col only when container is wide —— */
+.kg-loc__fields {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+  min-width: 0;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+}
+
+@container kg-loc (min-width: 420px) {
+  .kg-loc__fields {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 10px;
+  }
+
+  .kg-loc__full {
+    grid-column: 1 / -1;
+  }
+}
+
+.kg-loc__fields label {
+  display: grid;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+  min-width: 0;
+}
+
+.kg-loc__fields label span {
+  line-height: 1.3;
+}
+
+.kg-loc__fields input,
+.kg-loc__fields textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px; /* avoid iOS zoom */
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.kg-loc__fields textarea {
+  min-height: 72px;
+  line-height: 1.4;
+}
+
+.kg-loc__fields input:focus,
+.kg-loc__fields textarea:focus {
+  outline: 2px solid var(--blue);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.kg-loc__fields input:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: rgba(234, 61, 63, 0.45);
+}

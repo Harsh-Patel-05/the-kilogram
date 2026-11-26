@@ -64,7 +64,7 @@ export default function Footer() {
 
       <div className="container footer__bottom">
         <p>© {year} The Kilogram, Ahmedabad. All rights reserved.</p>
-        <p>Prices as per our June 2026 takeaway menu.</p>
+        <p>Prices update live from our kitchen menu.</p>
       </div>
     </footer>
   );

@@ -23,7 +23,7 @@ const highlights = [
   {
     icon: <Weight aria-hidden="true" />,
     title: 'Family portions',
-    text: 'Order by 300 gm, 500 gm or the full kilo.',
+    text: 'Order by the portion sizes listed on today’s menu.',
     accent: 'blue',
   },
 ];

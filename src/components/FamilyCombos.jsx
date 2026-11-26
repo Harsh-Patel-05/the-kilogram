@@ -1,36 +1,104 @@
-import { Phone } from 'lucide-react';
-import { familyCombos, findItemPrice, formatPrice, keepUnits } from '../data/menu.js';
-import { site } from '../data/site.js';
+import { useMemo } from 'react';
+import { ShoppingBag, Plus } from 'lucide-react';
+import { formatPrice, keepUnits } from '../data/menu.js';
+import { useMenu } from '../context/MenuContext.jsx';
+import { useCustomize } from '../context/CustomizeContext.jsx';
 import comboImg from '../assets/food/combo-plate.webp';
 import './FamilyCombos.css';
 
-/** "500 gm Bhaji + 500 gm Pulao + 6 Reg Pau" -> base "500 gm Bhaji + 500 gm Pulao", pau "6 Reg Pau" */
+/**
+ * Group combo SKUs for display.
+ * Preserves the real dish `name` + optional portion label so cart sync stays valid.
+ */
 function groupCombos(items) {
   const tiers = new Map();
   items.forEach((item) => {
-    const parts = item.name.split(' + ');
+    if (item.options?.length) {
+      item.options.forEach((o) => {
+        const parts = String(item.name || '').split(' + ');
+        if (parts.length < 2) {
+          if (!tiers.has(item.name)) tiers.set(item.name, []);
+          tiers.get(item.name).push({
+            pau: o.label,
+            price: o.price,
+            name: item.name,
+            optionLabel: o.label,
+          });
+          return;
+        }
+        const pau = parts.pop();
+        const base = parts.join(' + ');
+        // Prefer size label when the last segment isn't a pau-style choice
+        const displayPau = /pau|pav|pcs/i.test(pau) ? pau : o.label;
+        if (!tiers.has(base)) tiers.set(base, []);
+        tiers.get(base).push({
+          pau: displayPau,
+          price: o.price,
+          name: item.name,
+          optionLabel: o.label,
+        });
+      });
+      return;
+    }
+
+    const parts = String(item.name || '').split(' + ');
+    if (parts.length < 2) {
+      if (item.price == null) return;
+      if (!tiers.has(item.name)) tiers.set(item.name, []);
+      tiers.get(item.name).push({
+        pau: 'Regular',
+        price: item.price,
+        name: item.name,
+        optionLabel: null,
+      });
+      return;
+    }
     const pau = parts.pop();
     const base = parts.join(' + ');
     if (!tiers.has(base)) tiers.set(base, []);
-    tiers.get(base).push({ pau, price: item.price, name: item.name });
+    tiers.get(base).push({
+      pau,
+      price: item.price,
+      name: item.name,
+      optionLabel: null,
+    });
   });
   return [...tiers.entries()].map(([base, options]) => ({ base, options }));
 }
 
-const tiers = groupCombos(familyCombos.items);
-const butterHalf = findItemPrice('extras', '500 gm Combo');
-const butterKilo = findItemPrice('extras', '1 kg Combo');
+function findExtraPrice(menuGroups, nameHint) {
+  const extras = menuGroups
+    .flatMap((g) => g.categories)
+    .find((c) => /extra|add.?on/i.test(c.id) || /extra|add.?on/i.test(c.title));
+  if (!extras) return null;
+  const item = extras.items.find(
+    (i) => i.name === nameHint || i.name.toLowerCase().includes(nameHint.toLowerCase()),
+  );
+  return item?.price ?? item?.options?.[0]?.price ?? null;
+}
 
 export default function FamilyCombos() {
+  const { openCustomize } = useCustomize();
+  const { familyCombos, menuGroups, loading } = useMenu();
+
+  const tiers = useMemo(
+    () => (familyCombos?.items?.length ? groupCombos(familyCombos.items) : []),
+    [familyCombos],
+  );
+
+  const butterHalf = findExtraPrice(menuGroups, '500 gm Combo');
+  const butterKilo = findExtraPrice(menuGroups, '1 kg Combo');
+
+  // Avoid a tall empty/black gap while Firestore loads (or when no combos exist).
+  if (loading || !tiers.length) return null;
+
   return (
     <section id="combos" className="section combos" aria-labelledby="combos-title">
       <div className="container combos__grid">
         <div className="combos__intro" data-reveal>
-          <p className="eyebrow">
-            Family combo offers
-          </p>
+          <p className="eyebrow">Family combo offers</p>
           <h2 id="combos-title" className="section-title">
-            One call. <em>Dinner sorted.</em>
+            One order. <em>Dinner sorted.</em>
           </h2>
           <p className="section-sub">
             Bhaji, pulao and pau packed together, so you don’t have to work out quantities for everyone.
@@ -53,7 +121,7 @@ export default function FamilyCombos() {
               <header className="combo__head">
                 <h3 className="combo__base">
                   {tier.base.split(' + ').map((part, k) => (
-                    <span key={part}>
+                    <span key={`${tier.base}-${part}-${k}`}>
                       {k > 0 && <i aria-hidden="true">+</i>}
                       {part}
                     </span>
@@ -62,11 +130,29 @@ export default function FamilyCombos() {
               </header>
               <ul className="combo__options">
                 {tier.options.map((o) => (
-                  <li key={o.name}>
+                  <li key={`${o.name}|${o.optionLabel || o.pau}`}>
                     <span className="combo__pau">
                       <i aria-hidden="true">+</i> {o.pau}
                     </span>
-                    <span className="combo__price">{formatPrice(o.price)}</span>
+                    <button
+                      type="button"
+                      className="combo__price mi__add"
+                      aria-label={`Add ${o.name} for ${formatPrice(o.price)}`}
+                      onClick={() =>
+                        openCustomize({
+                          name: o.name,
+                          categoryId: familyCombos?.id || 'family-combos',
+                          basePrice: o.optionLabel ? undefined : Number(o.price),
+                          options: o.optionLabel
+                            ? [{ label: o.optionLabel, price: Number(o.price) }]
+                            : null,
+                          preselectLabel: o.optionLabel,
+                        })
+                      }
+                    >
+                      {formatPrice(o.price)}
+                      <Plus aria-hidden="true" />
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -74,14 +160,18 @@ export default function FamilyCombos() {
           ))}
 
           <div className="combos__notes" data-reveal>
-            <p>{keepUnits(familyCombos.note)}</p>
-            <p>
-              Extra butter: {formatPrice(butterHalf)} on 500&nbsp;gm combos, {formatPrice(butterKilo)} on 1&nbsp;kg
-              combos.
-            </p>
-            <a className="btn btn--red combos__cta" href={site.phoneHref}>
-              <Phone aria-hidden="true" />
-              Call to order a combo
+            {familyCombos?.note && <p>{keepUnits(familyCombos.note)}</p>}
+            {(butterHalf != null || butterKilo != null) && (
+              <p>
+                Extra butter
+                {butterHalf != null && <>: {formatPrice(butterHalf)} on 500&nbsp;gm combos</>}
+                {butterHalf != null && butterKilo != null && ','}{' '}
+                {butterKilo != null && <>{formatPrice(butterKilo)} on 1&nbsp;kg combos</>}.
+              </p>
+            )}
+            <a className="btn btn--red combos__cta" href="#menu">
+              <ShoppingBag aria-hidden="true" />
+              Order a combo online
             </a>
           </div>
         </div>

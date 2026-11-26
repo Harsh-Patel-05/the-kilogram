@@ -48,6 +48,16 @@
   color: #fff;
 }
 
+.orderbar__btn--cart {
+  position: relative;
+  border-color: rgba(248, 190, 59, 0.45);
+  color: var(--yellow);
+}
+
+.orderbar__btn--cart svg {
+  color: var(--yellow);
+}
+
 .orderbar__btn:active {
   transform: scale(0.96);
 }

@@ -4,14 +4,19 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node init && vite",
-    "build": "node init && vite build",
-    "preview": "vite preview"
+    "dev": "node init && node ./node_modules/vite/bin/vite.js",
+    "build": "node init && node ./node_modules/vite/bin/vite.js build",
+    "preview": "node ./node_modules/vite/bin/vite.js preview",
+    "test:radius": "node ./src/lib/haversine.test.mjs"
   },
   "dependencies": {
+    "firebase": "^12.11.0",
+    "leaflet": "^1.9.4",
     "lucide-react": "^1.49.0",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.13.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.1",

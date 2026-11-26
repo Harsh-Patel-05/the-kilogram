@@ -246,75 +246,102 @@
 .hero__copy > *,
 .hero__tag {
   opacity: 0;
-  translate: 0 18px;
+  transform: translateY(18px);
 }
 
 .hero__food {
-  scale: 1.06;
+  transform: scale(1.06);
 }
 
 .hero__logo {
   opacity: 0;
 }
 
-.is-loaded .hero__copy > * {
-  animation: hero-up 0.8s var(--ease-out) forwards;
-}
-
-.is-loaded .hero__copy > :nth-child(2) {
-  animation-delay: 0.08s;
-}
-.is-loaded .hero__copy > :nth-child(3) {
-  animation-delay: 0.16s;
-}
-.is-loaded .hero__copy > :nth-child(4) {
-  animation-delay: 0.24s;
-}
-.is-loaded .hero__copy > :nth-child(5) {
-  animation-delay: 0.32s;
-}
-.is-loaded .hero__copy > :nth-child(6) {
-  animation-delay: 0.4s;
-}
-.is-loaded .hero__copy > :nth-child(7) {
-  animation-delay: 0.48s;
+/* Hard visibility fallback — never leave the hero blank if animation is skipped/interrupted */
+.is-loaded .hero__copy > *,
+.is-loaded .hero__tag {
+  opacity: 1;
+  transform: none;
 }
 
 .is-loaded .hero__food {
-  animation: hero-settle 1.4s var(--ease-out) forwards;
+  transform: none;
 }
 
 .is-loaded .hero__logo {
-  animation:
-    hero-fade 0.8s var(--ease-out) 0.2s forwards,
-    hero-sway 6s ease-in-out 1.2s infinite;
-  transform-origin: 51% 55%;
+  opacity: 1;
 }
 
-.is-loaded .hero__tag {
-  animation: hero-up 0.7s var(--ease-spring) 0.55s forwards;
-}
+@media (prefers-reduced-motion: no-preference) {
+  .is-loaded .hero__copy > * {
+    animation: hero-up 0.8s var(--ease-out) both;
+  }
 
-.hero.is-offscreen .hero__logo {
-  animation-play-state: paused;
+  .is-loaded .hero__copy > :nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .is-loaded .hero__copy > :nth-child(3) {
+    animation-delay: 0.16s;
+  }
+  .is-loaded .hero__copy > :nth-child(4) {
+    animation-delay: 0.24s;
+  }
+  .is-loaded .hero__copy > :nth-child(5) {
+    animation-delay: 0.32s;
+  }
+  .is-loaded .hero__copy > :nth-child(6) {
+    animation-delay: 0.4s;
+  }
+  .is-loaded .hero__copy > :nth-child(7) {
+    animation-delay: 0.48s;
+  }
+
+  .is-loaded .hero__food {
+    animation: hero-settle 1.4s var(--ease-out) both;
+  }
+
+  .is-loaded .hero__logo {
+    animation:
+      hero-fade 0.8s var(--ease-out) 0.2s both,
+      hero-sway 6s ease-in-out 1.2s infinite;
+    transform-origin: 51% 55%;
+  }
+
+  .is-loaded .hero__tag {
+    animation: hero-up 0.7s var(--ease-spring) 0.55s both;
+  }
+
+  .hero.is-offscreen .hero__logo {
+    animation-play-state: paused;
+  }
 }
 
 @keyframes hero-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
   to {
     opacity: 1;
-    translate: 0 0;
+    transform: none;
   }
 }
 
 @keyframes hero-fade {
+  from {
+    opacity: 0;
+  }
   to {
     opacity: 1;
   }
 }
 
 @keyframes hero-settle {
+  from {
+    transform: scale(1.06);
+  }
   to {
-    scale: 1;
+    transform: none;
   }
 }
 
@@ -370,9 +397,9 @@
   .hero__tag,
   .hero__logo {
     opacity: 1;
-    translate: none;
+    transform: none;
   }
   .hero__food {
-    scale: none;
+    transform: none;
   }
 }

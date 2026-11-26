@@ -30,7 +30,7 @@ export const site = {
 export const hours = {
   daysLabel: 'All 7 days',
   slots: [
-    { open: 11 * 60, close: 14 * 60, openLabel: '11 AM', closeLabel: '2 PM' },
+    { open: 11 * 60, close: 14 * 60 + 50, openLabel: '11 AM', closeLabel: '2:50 PM' },
     { open: 18 * 60, close: 23 * 60, openLabel: '6 PM', closeLabel: '11 PM' },
   ],
 };
@@ -90,6 +90,7 @@ export const reviews = [
 export const navLinks = [
   { href: '#home', label: 'Home' },
   { href: '#menu', label: 'Menu' },
+  { href: '#combos', label: 'Combos' },
   { href: '#about', label: 'About' },
   { href: '#reviews', label: 'Reviews' },
   { href: '#contact', label: 'Contact' },

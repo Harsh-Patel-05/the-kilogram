@@ -1,5 +1,7 @@
 import { Fragment } from 'react';
+import { Plus } from 'lucide-react';
 import { formatPrice, keepUnits } from '../data/menu.js';
+import { useCustomize } from '../context/CustomizeContext.jsx';
 
 function Name({ item }) {
   const parts = item.name.split(' + ');
@@ -21,16 +23,36 @@ function Name({ item }) {
   );
 }
 
-export default function MenuItem({ item, cols }) {
+export default function MenuItem({ item, cols, categoryId }) {
+  const { openCustomize } = useCustomize();
+
+  const open = (preselectLabel = null) => {
+    openCustomize({
+      name: item.name,
+      categoryId: categoryId || null,
+      section: item.section || null,
+      options: item.options || null,
+      basePrice: item.price,
+      preselectLabel,
+    });
+  };
+
   if (item.options) {
     return (
       <li className={`mi mi--cols mi--cols-${cols}`}>
         <Name item={item} />
         {item.options.map((o) => (
-          <span key={o.label} className="mi__price">
+          <button
+            key={o.label}
+            type="button"
+            className="mi__price mi__add"
+            onClick={() => open(o.label)}
+            aria-label={`Customize ${item.name} ${o.label} for ${formatPrice(o.price)}`}
+          >
             <span className="visually-hidden">{o.label}: </span>
             {formatPrice(o.price)}
-          </span>
+            <Plus aria-hidden="true" />
+          </button>
         ))}
       </li>
     );
@@ -40,7 +62,15 @@ export default function MenuItem({ item, cols }) {
     <li className="mi mi--single">
       <Name item={item} />
       <span className="mi__leader" aria-hidden="true" />
-      <span className="mi__price">{formatPrice(item.price)}</span>
+      <button
+        type="button"
+        className="mi__price mi__add"
+        onClick={() => open(null)}
+        aria-label={`Customize ${item.name} for ${formatPrice(item.price)}`}
+      >
+        {formatPrice(item.price)}
+        <Plus aria-hidden="true" />
+      </button>
     </li>
   );
 }
