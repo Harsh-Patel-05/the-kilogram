@@ -1,3 +1,6 @@
+import { outOfAreaMessage } from './deliveryFees.js';
+import { DELIVERY_PHONE_DISPLAY } from '../data/restaurantLocation.js';
+
 const EARTH_RADIUS_KM = 6371;
 
 function toRad(deg) {
@@ -15,7 +18,6 @@ function isValidCoord(lat, lon) {
 
 /**
  * Straight-line distance between two WGS84 points (kilometres).
- * Used for delivery-radius checks — no routing API.
  */
 export function haversineKm(lat1, lon1, lat2, lon2) {
   if (!isValidCoord(lat1, lon1) || !isValidCoord(lat2, lon2)) return null;
@@ -37,14 +39,13 @@ export function haversineKm(lat1, lon1, lat2, lon2) {
   return 2 * EARTH_RADIUS_KM * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
-export function roundKm(km, digits = 1) {
+export function roundKm(km, digits = 2) {
   if (km == null || !Number.isFinite(km)) return null;
   const f = 10 ** digits;
   return Math.round(km * f) / f;
 }
 
 /**
- * Eligibility uses the displayed (1-decimal) distance so "3.0 km" is inside the radius.
  * @returns {{ eligible: boolean, distanceKm: number|null, message: string }}
  */
 export function checkDeliveryEligibility(customerLat, customerLng, restaurant, radiusKm) {
@@ -63,20 +64,20 @@ export function checkDeliveryEligibility(customerLat, customerLng, restaurant, r
     };
   }
 
-  const shown = roundKm(distanceKm, 1);
-  const max = radiusKm ?? restaurant.deliveryRadiusKm ?? 3;
+  const shown = roundKm(distanceKm, 2);
+  const max = radiusKm ?? restaurant.deliveryRadiusKm ?? 2;
 
   if (shown <= max) {
     return {
       eligible: true,
       distanceKm: shown,
-      message: `You're ${shown} km away — delivery is available!`,
+      message: `You're ${shown} km away — delivery is available.`,
     };
   }
 
   return {
     eligible: false,
     distanceKm: shown,
-    message: `You're outside our ${max} km delivery area. You can still order for pickup.`,
+    message: outOfAreaMessage(shown, DELIVERY_PHONE_DISPLAY),
   };
 }

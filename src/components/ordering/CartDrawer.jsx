@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
-import { Bike, Minus, Plus, ShoppingBag, Trash2, X } from 'lucide-react';
+import { useEffect, useMemo, useRef } from 'react';
+import { Bike, Minus, Plus, ShoppingBag, Sparkles, Trash2, X } from 'lucide-react';
 import { useCart } from '../../context/CartContext.jsx';
 import { formatPrice } from '../../data/menu.js';
 import { restaurantLocation } from '../../data/restaurantLocation.js';
+import { freeDeliveryProgress } from '../../lib/deliveryFees.js';
 import { lockBody, unlockBody } from '../../lib/bodyLock.js';
 import useFocusTrap from '../../hooks/useFocusTrap.js';
 import useOnlineOrdering from '../../hooks/useOnlineOrdering.js';
@@ -13,7 +14,16 @@ export default function CartDrawer({ open, onClose, onCheckout, menuReady = true
   const panelRef = useRef(null);
   const onlineOrdering = useOnlineOrdering();
   const kitchenOpen = onlineOrdering.enabled;
+  const wasUnlocked = useRef(false);
   useFocusTrap(panelRef, open);
+
+  const freeProg = useMemo(() => freeDeliveryProgress(subtotal), [subtotal]);
+  const justUnlocked = freeProg.unlocked && !wasUnlocked.current;
+
+  useEffect(() => {
+    if (freeProg.unlocked) wasUnlocked.current = true;
+    else wasUnlocked.current = false;
+  }, [freeProg.unlocked]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -31,6 +41,9 @@ export default function CartDrawer({ open, onClose, onCheckout, menuReady = true
   if (!open) return null;
 
   const canCheckout = menuReady && kitchenOpen;
+  const freeMin = restaurantLocation.freeDeliveryMinSubtotal;
+  const freeMaxKm = restaurantLocation.freeDeliveryMaxKm;
+  const maxKm = restaurantLocation.deliveryRadiusKm;
 
   return (
     <div className="kg-cart" role="dialog" aria-modal="true" aria-label="Your cart">
@@ -62,12 +75,36 @@ export default function CartDrawer({ open, onClose, onCheckout, menuReady = true
           </div>
         ) : (
           <>
-            <div className="kg-cart__banner">
-              <Bike aria-hidden="true" />
-              <span>
-                Free delivery within {restaurantLocation.deliveryRadiusKm} km · or choose pickup
-              </span>
+            <div
+              className={`kg-cart__banner${freeProg.unlocked ? ' kg-cart__banner--free' : ''}${justUnlocked ? ' is-unlock' : ''}`}
+              role="status"
+            >
+              {freeProg.unlocked ? (
+                <>
+                  <Sparkles aria-hidden="true" />
+                  <span>
+                    Free delivery unlocked for orders within {freeMaxKm} km!
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Bike aria-hidden="true" />
+                  <span>
+                    Add {formatPrice(freeProg.left)} more for free delivery (within {freeMaxKm} km) ·
+                    delivery up to {maxKm} km
+                  </span>
+                </>
+              )}
             </div>
+
+            {!freeProg.unlocked && (
+              <div className="kg-cart__free-bar" aria-hidden="true">
+                <div
+                  className="kg-cart__free-fill"
+                  style={{ width: `${Math.round(freeProg.progress * 100)}%` }}
+                />
+              </div>
+            )}
 
             <ul className="kg-cart__list">
               {items.map((item) => (
@@ -122,6 +159,10 @@ export default function CartDrawer({ open, onClose, onCheckout, menuReady = true
                 <span>Subtotal</span>
                 <strong>{formatPrice(subtotal)}</strong>
               </div>
+              <p className="kg-cart__fee-note">
+                Fees: ≤500 m ₹20 · ≤1 km ₹40 · ≤{maxKm} km ₹50 · free on ₹{freeMin}+ within{' '}
+                {freeMaxKm} km
+              </p>
               <button
                 type="button"
                 className="btn btn--red kg-cart__checkout"
@@ -135,7 +176,9 @@ export default function CartDrawer({ open, onClose, onCheckout, menuReady = true
                   ? 'Live menu unavailable — checkout is paused. Please refresh.'
                   : !kitchenOpen
                     ? `${onlineOrdering.label} — ${onlineOrdering.detail}`
-                    : 'Delivery charge calculated at checkout'}
+                    : onlineOrdering.callHint
+                      ? onlineOrdering.callHint
+                      : 'Exact delivery charge confirmed after you drop your pin'}
               </p>
             </footer>
           </>

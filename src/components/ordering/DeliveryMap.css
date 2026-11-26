@@ -18,8 +18,8 @@
 
 @media (max-width: 419px) {
   .kg-map {
-    height: clamp(160px, 28vh, 200px);
-    min-height: 160px;
+    height: clamp(200px, 34vh, 240px);
+    min-height: 200px;
   }
 }
 
@@ -47,9 +47,10 @@
   background: var(--surface) !important;
   color: var(--text) !important;
   border-color: var(--line-strong) !important;
-  width: 36px;
-  height: 36px;
-  line-height: 36px;
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  font-size: 18px;
 }
 
 .kg-map__overlay {

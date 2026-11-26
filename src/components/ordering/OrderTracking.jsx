@@ -23,6 +23,7 @@ import {
 import { formatPrice } from '../../data/menu.js';
 import { site } from '../../data/site.js';
 import BrandLockup from '../BrandLockup.jsx';
+import PreparingHero from './PreparingHero.jsx';
 import './OrderTracking.css';
 
 const ICONS = {
@@ -243,60 +244,93 @@ export default function OrderTracking() {
       <main className="kg-track__main">
         <div className="kg-track__layout">
           <div className="kg-track__primary">
-            <section className={`kg-track__hero status-${status}`} aria-live="polite">
-              <div className="kg-track__hero-copy">
-                <div className="kg-track__hero-top">
-                  {isLive ? (
-                    <span className="kg-track__live-pill">
-                      <span className="kg-track__live-dot" aria-hidden="true" />
-                      Live tracking
-                    </span>
-                  ) : isDone ? (
-                    <span className="kg-track__live-pill kg-track__live-pill--done">Completed</span>
-                  ) : (
-                    <span className="kg-track__live-pill kg-track__live-pill--bad">
-                      {statusLabel(status, order.orderType)}
-                    </span>
+            {['placed', 'confirmed', 'preparing'].includes(status) ? (
+              <PreparingHero
+                status={status}
+                etaMinutes={order.etaMinutes}
+                estRange={est}
+                tokenNumber={order.tokenNumber || null}
+                orderId={order.orderId || orderId}
+                customerName={order.customer?.fullName || ''}
+              />
+            ) : (
+              <section className={`kg-track__hero status-${status}`} aria-live="polite">
+                <div className="kg-track__hero-copy">
+                  <div className="kg-track__hero-top">
+                    {isLive ? (
+                      <span className="kg-track__live-pill">
+                        <span className="kg-track__live-dot" aria-hidden="true" />
+                        Live tracking
+                      </span>
+                    ) : isDone ? (
+                      <span className="kg-track__live-pill kg-track__live-pill--done">Completed</span>
+                    ) : (
+                      <span className="kg-track__live-pill kg-track__live-pill--bad">
+                        {statusLabel(status, order.orderType)}
+                      </span>
+                    )}
+                    <p className="kg-track__order-ref">{order.orderId || orderId}</p>
+                  </div>
+
+                  <h1 className="kg-track__hero-title">{msg.title}</h1>
+                  <p className="kg-track__hero-hint">{msg.hint}</p>
+
+                  {order.tokenNumber ? (
+                    <p className="kg-track__eta">
+                      Token <strong>#{order.tokenNumber}</strong>
+                    </p>
+                  ) : null}
+
+                  {isLive && (
+                    <p className="kg-track__eta">
+                      <Clock aria-hidden="true" />
+                      <span className="kg-track__eta-text">
+                        {order.etaMinutes != null ? (
+                          <>
+                            Est. <strong>~{order.etaMinutes} min</strong>
+                            <em> (set by kitchen)</em>
+                          </>
+                        ) : (
+                          <>
+                            Est. <strong>
+                              {est.min}–{est.max} min
+                            </strong>
+                            <em> after confirmation</em>
+                          </>
+                        )}
+                      </span>
+                    </p>
                   )}
-                  <p className="kg-track__order-ref">{order.orderId || orderId}</p>
+                  {order.rejectReason || order.cancelReason ? (
+                    <p className="kg-track__hero-hint" role="status">
+                      {order.rejectReason || order.cancelReason}
+                    </p>
+                  ) : null}
+
+                  <p className="kg-track__meta">
+                    Placed {formatWhen(order.createdAtIso || order.createdAt)}
+                    <span aria-hidden="true"> · </span>
+                    {order.orderType === 'pickup' ? 'Pickup' : 'Delivery'}
+                    {order.paymentMethod ? (
+                      <>
+                        <span aria-hidden="true"> · </span>
+                        {String(order.paymentMethod).replace(/_/g, ' ')}
+                      </>
+                    ) : null}
+                  </p>
+
+                  {isLive && (
+                    <div className="kg-track__progress" aria-hidden="true">
+                      <div className="kg-track__progress-bar" style={{ width: `${progress}%` }} />
+                    </div>
+                  )}
                 </div>
 
-                <h1 className="kg-track__hero-title">{msg.title}</h1>
-                <p className="kg-track__hero-hint">{msg.hint}</p>
-
-                {isLive && order.orderType === 'delivery' && (
-                  <p className="kg-track__eta">
-                    <Clock aria-hidden="true" />
-                    <span className="kg-track__eta-text">
-                      Est. <strong>{est.min}–{est.max} min</strong>
-                      <em> after confirmation</em>
-                    </span>
-                  </p>
-                )}
-
-                <p className="kg-track__meta">
-                  Placed {formatWhen(order.createdAtIso || order.createdAt)}
-                  <span aria-hidden="true"> · </span>
-                  {order.orderType === 'pickup' ? 'Pickup' : 'Delivery'}
-                  {order.paymentMethod ? (
-                    <>
-                      <span aria-hidden="true"> · </span>
-                      {String(order.paymentMethod).replace(/_/g, ' ')}
-                    </>
-                  ) : null}
-                </p>
-
-                {isLive && (
-                  <div className="kg-track__progress" aria-hidden="true">
-                    <div className="kg-track__progress-bar" style={{ width: `${progress}%` }} />
-                  </div>
-                )}
-              </div>
-
-              <div className="kg-track__hero-icon" aria-hidden="true">
-                <HeroIcon />
-              </div>
-            </section>
+                <div className="kg-track__hero-icon" aria-hidden="true">
+                  <HeroIcon />
+                </div>
+              </section>
+            )}
 
             {!isTerminalBad && !isRefund && (
               <section className="kg-track__panel" aria-label="Order progress">

@@ -15,6 +15,7 @@ import Contact from './components/Contact.jsx';
 import MobileOrderBar from './components/MobileOrderBar.jsx';
 import Footer from './components/Footer.jsx';
 import FloatingActions from './components/FloatingActions.jsx';
+import OnlineOrderingBanner from './components/OnlineOrderingBanner.jsx';
 import OrderingUI from './components/ordering/OrderingUI.jsx';
 import OrderTracking from './components/ordering/OrderTracking.jsx';
 import useReveal from './hooks/useReveal.js';
@@ -70,6 +71,7 @@ function HomePage({ onOpenCart }) {
         Skip to menu
       </a>
       <Header onOpenCart={onOpenCart} />
+      <OnlineOrderingBanner />
       <main>
         <Hero />
         <Highlights />

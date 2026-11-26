@@ -109,8 +109,8 @@
 .chip {
   position: relative;
   flex: none;
-  min-height: 40px;
-  padding: 0 14px;
+  min-height: 44px;
+  padding: 0 16px;
   border: 1px solid var(--line-strong);
   border-radius: 999px;
   background: var(--surface);
@@ -258,9 +258,10 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  min-height: 36px;
-  padding: 4px 8px;
-  border-radius: 8px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 6px 12px;
+  border-radius: 10px;
   border: 1px solid rgba(248, 190, 59, 0.22);
   background: rgba(248, 190, 59, 0.06);
   color: inherit;
@@ -304,7 +305,9 @@
 }
 
 .mc__add-btn {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
+  min-height: 44px;
+  padding-inline: 12px;
   color: var(--yellow);
   border-color: var(--line-strong);
   background: var(--surface);

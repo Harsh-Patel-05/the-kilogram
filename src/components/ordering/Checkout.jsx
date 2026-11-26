@@ -15,8 +15,13 @@ import { useCart } from '../../context/CartContext.jsx';
 import { formatPrice } from '../../data/menu.js';
 import { restaurantLocation } from '../../data/restaurantLocation.js';
 import { site } from '../../data/site.js';
-import { calcDeliveryCharge, placeOnlineOrder } from '../../lib/orders.js';
+import { placeOnlineOrder } from '../../lib/orders.js';
 import { checkDeliveryEligibility } from '../../lib/haversine.js';
+import { resolveDeliveryCharge } from '../../lib/deliveryFees.js';
+import {
+  DELIVERY_PHONE_DISPLAY,
+  DELIVERY_PHONE_HREF,
+} from '../../data/restaurantLocation.js';
 import { lockBody, unlockBody } from '../../lib/bodyLock.js';
 import useFocusTrap from '../../hooks/useFocusTrap.js';
 import useOnlineOrdering from '../../hooks/useOnlineOrdering.js';
@@ -87,10 +92,34 @@ export default function Checkout({ open, onClose, onBackToCart, menuReady = true
 
   const discount = 0;
   const radiusKm = restaurantLocation.deliveryRadiusKm;
-  const deliveryCharge = useMemo(
-    () => calcDeliveryCharge(subtotal - discount, orderType),
-    [subtotal, orderType],
-  );
+  const freeMin = restaurantLocation.freeDeliveryMinSubtotal;
+  const freeMaxKm = restaurantLocation.freeDeliveryMaxKm;
+
+  const feePreview = useMemo(() => {
+    if (orderType !== 'delivery') {
+      return resolveDeliveryCharge({
+        orderType: 'pickup',
+        subtotal: subtotal - discount,
+        distanceKm: null,
+      });
+    }
+    const dist =
+      address?.latitude != null && address?.longitude != null
+        ? checkDeliveryEligibility(
+            address.latitude,
+            address.longitude,
+            restaurantLocation,
+            restaurantLocation.deliveryRadiusKm,
+          ).distanceKm
+        : null;
+    return resolveDeliveryCharge({
+      orderType: 'delivery',
+      subtotal: subtotal - discount,
+      distanceKm: dist,
+    });
+  }, [orderType, subtotal, discount, address?.latitude, address?.longitude]);
+
+  const deliveryCharge = feePreview.fee;
   const total = Math.max(0, subtotal - discount + deliveryCharge);
 
   useEffect(() => {
@@ -105,6 +134,43 @@ export default function Checkout({ open, onClose, onBackToCart, menuReady = true
       window.removeEventListener('keydown', onKey);
     };
   }, [open, onClose, busy]);
+
+  /* Phone keyboard: keep sheet inside visual viewport + scroll focused fields into view */
+  useEffect(() => {
+    if (!open) return undefined;
+    const panel = panelRef.current;
+    if (!panel) return undefined;
+
+    const syncViewport = () => {
+      const vv = window.visualViewport;
+      if (!vv || window.matchMedia('(min-width: 720px)').matches) {
+        panel.style.removeProperty('--kg-vv-h');
+        return;
+      }
+      panel.style.setProperty('--kg-vv-h', `${Math.round(vv.height)}px`);
+    };
+
+    const onFocusIn = (e) => {
+      const el = e.target;
+      if (!(el instanceof HTMLElement)) return;
+      if (!/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
+      window.setTimeout(() => {
+        el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 120);
+    };
+
+    syncViewport();
+    const vv = window.visualViewport;
+    vv?.addEventListener('resize', syncViewport);
+    vv?.addEventListener('scroll', syncViewport);
+    panel.addEventListener('focusin', onFocusIn);
+    return () => {
+      vv?.removeEventListener('resize', syncViewport);
+      vv?.removeEventListener('scroll', syncViewport);
+      panel.removeEventListener('focusin', onFocusIn);
+      panel.style.removeProperty('--kg-vv-h');
+    };
+  }, [open]);
 
   useEffect(() => {
     if (!open) {
@@ -249,10 +315,11 @@ export default function Checkout({ open, onClose, onBackToCart, menuReady = true
 
       clearCart();
       setSuccessId(result.orderId);
+      // Quick thank-you flash, then stay on live preparing/track page
       setTimeout(() => {
         onClose?.();
-        navigate(`/track/${result.orderId}`);
-      }, 1400);
+        navigate(`/track/${result.orderId}`, { replace: true });
+      }, 900);
     } catch (err) {
       setError(friendlyError(err));
     } finally {
@@ -315,7 +382,9 @@ export default function Checkout({ open, onClose, onBackToCart, menuReady = true
                 >
                   <Bike aria-hidden="true" />
                   <strong>Delivery</strong>
-                  <span>Free within {restaurantLocation.deliveryRadiusKm} km</span>
+                  <span>
+                    Up to {radiusKm} km · free over ₹{freeMin} within {freeMaxKm} km
+                  </span>
                 </button>
                 <button
                   type="button"
@@ -361,13 +430,24 @@ export default function Checkout({ open, onClose, onBackToCart, menuReady = true
                     {addressSummary}
                   </p>
                   <p className="is-ok">{liveEligibility.message}</p>
+                  {feePreview.reason ? <p className="kg-check__fee-hint">{feePreview.reason}</p> : null}
                 </div>
               ) : (
-                <LocationPicker
-                  value={address || undefined}
-                  onChange={setAddress}
-                  onEligibilityChange={setEligibility}
-                />
+                <>
+                  <LocationPicker
+                    value={address || undefined}
+                    onChange={setAddress}
+                    onEligibilityChange={setEligibility}
+                  />
+                  {liveEligibility && !liveEligibility.eligible ? (
+                    <div className="kg-check__out-area" role="alert">
+                      <p>{liveEligibility.message}</p>
+                      <a className="btn btn--blue" href={DELIVERY_PHONE_HREF}>
+                        Call {DELIVERY_PHONE_DISPLAY}
+                      </a>
+                    </div>
+                  ) : null}
+                </>
               )}
             </section>
           )}
@@ -432,11 +512,16 @@ export default function Checkout({ open, onClose, onBackToCart, menuReady = true
                     <dd>
                       {orderType === 'pickup'
                         ? 'Free'
-                        : deliveryCharge === 0
-                          ? 'Free'
-                          : formatPrice(deliveryCharge)}
+                        : feePreview.free
+                          ? 'Free unlocked'
+                          : deliveryCharge === 0
+                            ? 'Set pin for fee'
+                            : formatPrice(deliveryCharge)}
                     </dd>
                   </div>
+                  {orderType === 'delivery' && feePreview.reason ? (
+                    <p className="kg-check__fee-hint">{feePreview.reason}</p>
+                  ) : null}
                   <div className="kg-check__grand">
                     <dt>Total</dt>
                     <dd>{formatPrice(total)}</dd>

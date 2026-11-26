@@ -57,9 +57,9 @@ export default function Contact() {
               Hungry? <em>Order online.</em>
             </h2>
             <p className="contact__lead">
-              Order direct from this website for free delivery within 3 km — add dishes from the menu,
-              set your pin on the map, and track your order live. You can still call us, pick up, or use
-              Swiggy, Zomato or Toing.
+              Order direct from this website — delivery within 2 km of Jagatpur. Orders ₹500+ get free
+              delivery within 1.5 km. Drop your pin on the map and track live. Outside our area? Call us
+              — we can help arrange Rapido or Porter. You can also pick up or use Swiggy, Zomato or Toing.
             </p>
 
             <a className="contact__phone" href={site.phoneHref}>
@@ -90,8 +90,9 @@ export default function Contact() {
             <div id="order-online" className="contact__delivery">
               <h3 className="contact__label">Order on this website</h3>
               <p className="contact__lead" style={{ marginBottom: 12 }}>
-                Add items from the live menu, choose delivery or pickup at checkout. Delivery within our
-                mapped radius of Jagatpur.
+                Add items from the live menu, choose delivery or pickup at checkout. Delivery fees: ₹20
+                nearby (≤500 m), ₹40 up to 1 km, ₹50 up to 2 km. Free delivery on ₹500+ within 1.5 km.
+                Website delivery Mon–Fri during kitchen hours.
               </p>
               <a className="btn btn--yellow" href="#menu">
                 Start ordering

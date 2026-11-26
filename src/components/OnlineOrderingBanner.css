@@ -1,0 +1,40 @@
+.kg-online-banner {
+  position: sticky;
+  top: var(--header-h, 64px);
+  z-index: 40;
+  background: linear-gradient(90deg, #3a1a1c, #1a1012 55%, #241810);
+  border-bottom: 1px solid rgba(248, 190, 59, 0.35);
+  color: #f4f1ea;
+}
+
+.kg-online-banner__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: grid;
+  gap: 4px;
+  text-align: center;
+}
+
+.kg-online-banner__inner strong {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f8be3b;
+}
+
+.kg-online-banner__inner p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: rgba(244, 241, 234, 0.9);
+}
+
+.kg-online-banner__inner a {
+  justify-self: center;
+  margin-top: 4px;
+  font-weight: 700;
+  color: #9ed8f5;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

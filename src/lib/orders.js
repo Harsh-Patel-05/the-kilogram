@@ -11,6 +11,7 @@ import {
 import { db, ensureCustomerAuth } from './firebase.js';
 import { restaurantLocation } from '../data/restaurantLocation.js';
 import { checkDeliveryEligibility } from './haversine.js';
+import { resolveDeliveryCharge } from './deliveryFees.js';
 import { resolveOnlineOrderingEnabled } from './onlineOrdering.js';
 
 export const ONLINE_ORDERS = 'onlineOrders';
@@ -46,17 +47,9 @@ function makeOrderId() {
   return `KG-${t}-${r}`;
 }
 
-export function calcDeliveryCharge(subtotal, orderType) {
-  if (orderType !== 'delivery') return 0;
-  const { deliveryCharge, freeDeliveryMinSubtotal } = restaurantLocation;
-  if (
-    freeDeliveryMinSubtotal != null &&
-    Number.isFinite(freeDeliveryMinSubtotal) &&
-    subtotal >= freeDeliveryMinSubtotal
-  ) {
-    return 0;
-  }
-  return Number(deliveryCharge) || 0;
+/** @deprecated Prefer resolveDeliveryCharge with distanceKm */
+export function calcDeliveryCharge(subtotal, orderType, distanceKm = null) {
+  return resolveDeliveryCharge({ orderType, subtotal, distanceKm }).fee;
 }
 
 /**
@@ -111,7 +104,14 @@ export async function placeOnlineOrder({
   const nowIso = new Date().toISOString();
   const subtotal = Number(pricing.subtotal) || 0;
   const discount = Number(pricing.discount) || 0;
-  const deliveryCharge = calcDeliveryCharge(subtotal - discount, type);
+  // Recompute fee from distance (never trust client-only fee blindly)
+  const feeResolved = resolveDeliveryCharge({
+    orderType: type,
+    subtotal: subtotal - discount,
+    distanceKm,
+  });
+  const deliveryCharge =
+    type === 'delivery' ? feeResolved.fee : 0;
   const total = Math.max(0, subtotal - discount + deliveryCharge);
 
   const payload = {
@@ -136,8 +136,14 @@ export async function placeOnlineOrder({
       subtotal,
       discount,
       deliveryCharge,
+      deliveryFree: feeResolved.free,
+      deliveryFeeReason: feeResolved.reason,
       total,
     },
+    posAlerted: false,
+    etaMinutes: null,
+    estimatedReadyAt: null,
+    linkedPosOrderId: null,
     deliveryAddress:
       type === 'delivery'
         ? {

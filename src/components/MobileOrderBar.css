@@ -69,9 +69,10 @@
   }
   .orderbar__btn {
     flex-direction: column;
-    gap: 3px;
-    min-height: 52px;
-    font-size: 0.6875rem;
+    gap: 4px;
+    min-height: 56px;
+    font-size: 0.75rem;
+    padding: 6px 4px;
   }
 }
 

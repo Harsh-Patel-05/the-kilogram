@@ -35,6 +35,8 @@ export default function LocationPicker({ value, onChange, onEligibilityChange })
   const [searchBusy, setSearchBusy] = useState(false);
   const [geocodeNote, setGeocodeNote] = useState('');
   const [eligibility, setEligibility] = useState(null);
+  const [suggestBox, setSuggestBox] = useState(null);
+  const searchWrapRef = useRef(null);
 
   const pushChange = useCallback(
     (patchOrNext) => {
@@ -159,6 +161,45 @@ export default function LocationPicker({ value, onChange, onEligibilityChange })
 
   const field = (key) => (e) => pushChange({ [key]: e.target.value });
 
+  useEffect(() => {
+    if (!suggestions.length) {
+      setSuggestBox(null);
+      return undefined;
+    }
+    const place = () => {
+      const el = searchWrapRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const maxH = Math.min(240, Math.round(window.innerHeight * 0.36));
+      const spaceBelow = window.innerHeight - r.bottom - 12;
+      setSuggestBox({
+        top: Math.round(r.bottom + 4),
+        left: Math.round(r.left),
+        width: Math.round(r.width),
+        maxHeight: Math.max(120, Math.min(maxH, spaceBelow)),
+      });
+    };
+    place();
+    window.addEventListener('resize', place);
+    window.visualViewport?.addEventListener('resize', place);
+    window.visualViewport?.addEventListener('scroll', place);
+    // Checkout body scrolls — keep dropdown aligned
+    const scrollParents = [];
+    let node = searchWrapRef.current?.parentElement;
+    while (node) {
+      const style = getComputedStyle(node);
+      if (/(auto|scroll)/.test(style.overflowY)) scrollParents.push(node);
+      node = node.parentElement;
+    }
+    scrollParents.forEach((n) => n.addEventListener('scroll', place, { passive: true }));
+    return () => {
+      window.removeEventListener('resize', place);
+      window.visualViewport?.removeEventListener('resize', place);
+      window.visualViewport?.removeEventListener('scroll', place);
+      scrollParents.forEach((n) => n.removeEventListener('scroll', place));
+    };
+  }, [suggestions.length, query]);
+
   const pickSuggestion = async (s) => {
     setQuery(s.label);
     setSuggestions([]);
@@ -197,7 +238,7 @@ export default function LocationPicker({ value, onChange, onEligibilityChange })
           ) : null}
         </div>
 
-        <div className="kg-loc__search">
+        <div className="kg-loc__search" ref={searchWrapRef}>
           <Search className="kg-loc__search-icon" aria-hidden="true" />
           <input
             type="search"
@@ -206,6 +247,7 @@ export default function LocationPicker({ value, onChange, onEligibilityChange })
             placeholder="Search area or society"
             autoComplete="street-address"
             aria-label="Search address"
+            enterKeyHint="search"
           />
           {query ? (
             <button
@@ -220,8 +262,17 @@ export default function LocationPicker({ value, onChange, onEligibilityChange })
               <X aria-hidden="true" />
             </button>
           ) : null}
-          {suggestions.length > 0 ? (
-            <ul className="kg-loc__suggest" role="listbox">
+          {suggestions.length > 0 && suggestBox ? (
+            <ul
+              className="kg-loc__suggest kg-loc__suggest--fixed"
+              role="listbox"
+              style={{
+                top: suggestBox.top,
+                left: suggestBox.left,
+                width: suggestBox.width,
+                maxHeight: suggestBox.maxHeight,
+              }}
+            >
               {suggestions.map((s) => (
                 <li key={`${s.lat}-${s.lng}-${s.label}`}>
                   <button type="button" onClick={() => pickSuggestion(s)}>
